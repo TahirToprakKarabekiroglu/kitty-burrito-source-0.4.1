@@ -1,0 +1,12 @@
+kitty--burrito
+burrito--kitty
+kitty--kitty
+burrito--burrito
+kitty burrito
+kitty burrito--kitty burrito
+kitty burrito--kitty
+kitty burrito--burrito
+burrito kitty
+burrito kitty--kitty burrito
+burrito kitty--kitty
+burrito kitty--burrito
