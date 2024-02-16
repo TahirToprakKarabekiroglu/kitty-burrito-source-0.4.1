@@ -143,7 +143,7 @@ class WeekData {
 
 		var songs:Array<Array<Dynamic>> = [
 			["Beginning of a New Insanity", "burito", [49, 35, 25]],
-			["Unsoundness of Insanity", "burito", [49, 35, 25]],
+			["Hardened Insanity 2", "burito", [49, 35, 25]],
 			["Kitty's Insanity", "burito", [49, 35, 25]],
 			["Post Insanity", "burito", [49, 35, 25]]
 		];

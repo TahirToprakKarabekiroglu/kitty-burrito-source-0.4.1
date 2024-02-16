@@ -3028,7 +3028,7 @@ class PlayState extends MusicBeatState
 			}
 			else lc += 0.004;
 
-			if (FlxG.random.bool(.25))
+			if (FlxG.random.bool(.1))
 			{
 				lc = oldlc;
 				lc += 10;
