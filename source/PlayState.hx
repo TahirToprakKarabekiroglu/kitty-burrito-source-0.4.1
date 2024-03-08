@@ -216,6 +216,8 @@ class PlayState extends MusicBeatState
 
 	var windowsXP:Bool;
 
+	var click:ClickHere;
+
 	// Lua shit
 	private var luaDebugGroup:FlxTypedGroup<DebugLuaText>;
 	var taskbar:FlxSprite = new FlxSprite();
@@ -622,6 +624,30 @@ class PlayState extends MusicBeatState
 		oldBfY = boyfriend.y;
 		if (Paths.formatToSongPath(SONG.song) == "hold-your-insanity")
 			health = 1.5;
+
+		click = new ClickHere();
+		click.y = FlxG.height;
+		click.x = 30;
+		click.cameras = [camHUD];
+		if (Songs.songs.exists(Paths.formatToSongPath(SONG.song)))
+		{
+			add(click);
+			FlxTween.tween(click, {y: FlxG.height - click.height}, 2.5, {ease: FlxEase.expoInOut, onUpdate: (tmr) -> {
+			}, onComplete: (tmr) -> {
+				new FlxTimer().start(5, function(tmr) 
+				{
+					FlxTween.tween(click, {y: FlxG.height + click.height + 20}, 2.5, {ease: FlxEase.expoInOut, onComplete: (tmr) -> {
+						click.active = false;
+						remove(click);
+						click.kill();
+						click.destroy();
+						click = null;
+						if (!windowsXP)
+							FlxG.mouse.visible = false;
+					}});
+				});
+			}});
+		}
 		super.create();
 	}
 	var healthString = "0.00000001";
@@ -1033,6 +1059,7 @@ class PlayState extends MusicBeatState
 		callOnLuas('onSongStart', []);
 	}
 
+	var sBurritos:Int;
 	var burritos:Int;
 	var burritod:Int;
 	var debugNum:Int = 0;
@@ -1171,6 +1198,8 @@ class PlayState extends MusicBeatState
 				burritos++;
 			else if (i.mustPress && i.noteType == 'Kitty Note')
 				burritod++;
+			if (i.mustPress && !i.ignoreNote && !i.isSustainNote)
+				sBurritos++;
 		}
 		checkEventNote();
 		generatedMusic = true;
@@ -1505,6 +1534,16 @@ class PlayState extends MusicBeatState
 		if (Paths.formatToSongPath(SONG.song) == "hold-your-insanity" && !FlxG.keys.pressed.SPACE && insanityHold < 150)
 			health -= elapsed / 4.5 + insanityIncrase;
 
+		var l = Songs.songs.get(Paths.formatToSongPath(PlayState.SONG.song));
+		if (l != null && click != null && click.active) 
+		{
+			FlxG.mouse.visible = true;
+			if (FlxG.mouse.justPressed && FlxG.mouse.overlaps(click, camHUD)) 
+			{
+				CoolUtil.browserLoad(l);
+			}
+		}
+
 		switch (curStage)
 		{
 			case 'schoolEvil':
@@ -1668,7 +1707,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 		else
-			scoreTxt.text = 'Burritos: $songScore/$burritos | Misses: ' + songMisses;
+			scoreTxt.text = 'Burritos: $songScore/$burritos($sBurritos) | Misses: ' + songMisses;
 
 		if (Paths.formatToSongPath(SONG.song) == "we're-landing-at-last")
 			scoreTxt.text += ' | L.C.: %${FlxMath.roundDecimal(lc, 2)}';

@@ -145,6 +145,7 @@ class WeekData {
 			["Beginning of a New Insanity", "burito", [49, 35, 25]],
 			["Hardened Insanity 2", "burito", [49, 35, 25]],
 			["Kitty's Insanity", "burito", [49, 35, 25]],
+			["Insanity", "burito", [49, 35, 25]],
 			["Post Insanity", "burito", [49, 35, 25]]
 		];
 		var weekFile:WeekFile = {
@@ -179,6 +180,7 @@ class WeekData {
 				song.push(["Unholy Insanity Resonance", "", [255, 255, 255]]);
 				song.push(["Fireflies Tell Insanity", "", [3, 158, 240]]);
 				song.push(["Hold Your Insanity", "", [51, 107, 104]]);
+				song.push(["Higher", "", [0, 136, 255]]);
 			}
 
 			var weekFile:WeekFile = {

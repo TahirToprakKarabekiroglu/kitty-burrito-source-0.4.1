@@ -98,7 +98,7 @@ class FreeplayState extends MusicBeatState
 
 		for (i in 0...songs.length)
 		{
-			var song = ["title.wma", "Unholy Insanity Resonance", "Fireflies Tell Insanity", "Hold Your Insanity", "Insanity Found in Ruins", "We're Landing At Last"];
+			var song = ["title.wma", "Unholy Insanity Resonance", "Fireflies Tell Insanity", "Hold Your Insanity", "Insanity Found in Ruins", "We're Landing At Last", "Higher"];
 			var songText:Alphabet = new Alphabet(0, (70 * i) + (songs[i].songName != 'title.wma' ? 30 : -70), songs[i].songName, !song.contains(songs[i].songName), false);
 			if (song.contains(songs[i].songName))
 				songText.yAdd = -60;
