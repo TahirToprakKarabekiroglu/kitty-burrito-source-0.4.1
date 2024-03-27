@@ -41,7 +41,7 @@ class StrumNote extends FlxSprite
 
 		if (shouldChangeAlpha)
 		{
-			alpha += elapsed / 8;
+			alpha += elapsed / 5;
 			//multAlpha = alpha;
 			if (alpha >= 1)
 			{

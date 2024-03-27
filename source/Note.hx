@@ -98,6 +98,7 @@ class Note extends FlxSprite
 						colorSwap.hue = 0;
 						colorSwap.saturation = 0;
 						colorSwap.brightness = 0;
+						earlyHitMult = 0.25;
 					}
 			}
 			noteType = value;
@@ -318,8 +319,8 @@ class Note extends FlxSprite
 		{
 			earlyHitMult = switch PlayState.instance.warmnessLevel {
 				case "Warm": 1;
-				case "Moderate": 0.5;
-				case "Cold": 0.25;
+				case "Moderate": 0.75;
+				case "Cold": 0.5;
 				case _: 0;
 			}
 		}

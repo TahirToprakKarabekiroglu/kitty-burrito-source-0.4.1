@@ -69,9 +69,9 @@ class TitleState extends MusicBeatState
 				polymod.Polymod.init({modRoot: "mods", dirs: folders});
 			}
 		}
-
 		//Gonna finish this later, probably
 		#end
+
 		FlxG.game.focusLostFramerate = 60;
 		FlxG.sound.muteKeys = muteKeys;
 		FlxG.sound.volumeDownKeys = volumeDownKeys;
@@ -85,6 +85,12 @@ class TitleState extends MusicBeatState
 
 		swagShader = new ColorSwap();
 		super.create();
+
+		if (ClientPrefs.flashingCar && !FlxG.save.data.sawCat)
+		{
+			FlxG.switchState(new FlashingState());
+			return;
+		}
 
 		FlxG.save.bind('funkin', 'tahirk786');
 		ClientPrefs.loadPrefs();

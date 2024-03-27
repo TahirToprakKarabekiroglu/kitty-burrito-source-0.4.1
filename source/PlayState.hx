@@ -223,7 +223,7 @@ class PlayState extends MusicBeatState
 	var taskbar:FlxSprite = new FlxSprite();
 	var startMenu:FlxSprite;
 	var lc:Float;
-	var lcM:Float = 5;
+	var lcM:Float = 4;
 
 	override public function create()
 	{
@@ -358,7 +358,7 @@ class PlayState extends MusicBeatState
 				bg.scrollFactor.set();
 				add(bg);
 			case 'stage': //Week 1
-				if (Paths.formatToSongPath(SONG.song) == 'ascending-insanity')
+				if (Paths.formatToSongPath(SONG.song) == 'insanity')
 				{
 					nightBG = new BGSprite("bg_night");
 					nightBG.screenCenter();
@@ -1151,7 +1151,7 @@ class PlayState extends MusicBeatState
 					unspawnNotes.push(swagNote);
 
 					var floorSus:Int = Math.round(susLength);
-					if(floorSus > 0) {
+					if(floorSus > 0 && songNotes[3] != "Kitty Note") {
 						for (susNote in 0...floorSus+1)
 						{
 							oldNote = unspawnNotes[Std.int(unspawnNotes.length - 1)];
@@ -1527,8 +1527,8 @@ class PlayState extends MusicBeatState
 			lc = 0;
 		else if (lc > 100)
 			lc = 100;
-		if (lcM < 1)
-			lcM = 1;
+		if (lcM < 0.25)
+			lcM = 0.25;
 
 		insanityIncrase += FlxG.elapsed / 25000;
 		if (Paths.formatToSongPath(SONG.song) == "hold-your-insanity" && !FlxG.keys.pressed.SPACE && insanityHold < 150)
@@ -2164,37 +2164,26 @@ class PlayState extends MusicBeatState
 		callOnLuas('onUpdatePost', [elapsed]);
 		#end
 
-		if (Paths.formatToSongPath(SONG.song) == "ascending-insanity")
+		if (Paths.formatToSongPath(SONG.song) == "insanity")
 		{
-			if (curStep >= 767 && curStep < 1023)
+			if (curStep >= 2368 && curStep < 3327)
 			{
-				dad.y -= elapsed * 30;
-				moveCamera(true);
-			}
-			else if (curStep >= 1023 && curStep < 1279)
-			{
-				boyfriend.y -= elapsed * 30;
+				boyfriend.y -= elapsed * 3;
 				moveCamera(false);
 			}
 			else if (!tweened && curStep >= 3327 && !paused)
 			{
 				FlxTween.tween(boyfriend, {y: oldBfY}, 3, {ease: FlxEase.expoInOut});
-				FlxTween.tween(dad, {y: oldDadY}, 3, {ease: FlxEase.expoInOut});
-					   
 				tweened = true;
 			}
-			if (curStep >= 1023 && curStep < 3327)
-			{
-				dad.y += Math.sin(elapsedVal);
-			} 
-			if (curStep >= 1279 && curStep < 3327)
+			if (curStep >= 2368 && curStep < 3327)
 			{
 				boyfriend.y += Math.sin(elapsedVal);
 			}
 
-			if (curStep >= 767 && curStep < 1279)
+			if (curStep >= 2368 && curStep < 3327)
 			{
-				bg.alpha -= elapsed / 4;
+				bg.alpha -= elapsed / 6;
 			}
 			else if (curStep >= 3327 && !tweenedBG)
 			{
@@ -2610,7 +2599,7 @@ class PlayState extends MusicBeatState
 			}
 			else
 			{
-				if (Paths.formatToSongPath(SONG.song) == "ascending-insanity")
+				if (Paths.formatToSongPath(SONG.song) == "insanity")
 				{
 					FlxG.save.data.finishedFirstSong = true;
 					FlxG.save.flush();
@@ -3051,7 +3040,7 @@ class PlayState extends MusicBeatState
 			var oldlc = lc;
 			if (!note.isSustainNote)
 			{
-				lc += FlxG.random.float(0.05, 0.125);
+				lc += FlxG.random.float(0.075, 0.125);
 				if(cpuControlled) {
 					boyfriend.holdTimer = 0;
 				}
@@ -3067,7 +3056,7 @@ class PlayState extends MusicBeatState
 			}
 			else lc += 0.004;
 
-			if (FlxG.random.bool(.1))
+			if (FlxG.random.bool(.15))
 			{
 				lc = oldlc;
 				lc += 10;
@@ -3170,7 +3159,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		if(ClientPrefs.flashing) {
+		if(ClientPrefs.flashingCar) {
 			halloweenWhite.alpha = 0.45;
 			FlxTween.tween(halloweenWhite, {alpha: 0.6}, 0.075);
 			FlxTween.tween(halloweenWhite, {alpha: 0}, 0.25, {startDelay: 0.15});

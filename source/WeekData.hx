@@ -143,9 +143,7 @@ class WeekData {
 
 		var songs:Array<Array<Dynamic>> = [
 			["Beginning of a New Insanity", "burito", [49, 35, 25]],
-			["Hardened Insanity 2", "burito", [49, 35, 25]],
 			["Kitty's Insanity", "burito", [49, 35, 25]],
-			["Insanity", "burito", [49, 35, 25]],
 			["Post Insanity", "burito", [49, 35, 25]]
 		];
 		var weekFile:WeekFile = {
@@ -170,7 +168,7 @@ class WeekData {
 		if (FlxG.save.data.finishedStory)
 		{
 			var song:Array<Array<Dynamic>> = [
-				["Ascending Insanity", "burito", [255, 255, 255]],
+				["Insanity", "burito", [255, 255, 255]],
 				["Warmth Without Insanity", "burito", [255, 255, 255]],
 				["We're Landing At Last", "burito", [255, 255, 255]],
 			];

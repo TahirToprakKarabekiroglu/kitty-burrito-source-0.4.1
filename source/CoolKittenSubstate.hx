@@ -54,6 +54,7 @@ class CoolKittenSubstate extends FlxGroup
         text.setFormat(Paths.font("vcr.ttf"), 36, FlxColor.WHITE, CENTER, OUTLINE, FlxColor.BLACK);
         text.borderSize = 2;
         text.text = "KITTY NOTES: \nWhen hit, the strum you hit the note will disappear.\nYou cannot hit notes that have the same direction\nas the strum until the strum is fully visible!\n\n(Strums will reappear over time)";
+        text.text += "\nThey are quite hard to hit, but deadly.";
         text.screenCenter();
         text.y -= 210;
         add(text);

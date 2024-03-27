@@ -25,8 +25,10 @@ class CreditsState extends MusicBeatState
 
 	private static var creditsStuff:Array<Dynamic> = [ //Name - Icon name - Description - Link - BG Color
 		['Burrito Kitty'],
-		['tahirk', 'macxp', 'Made the mod', 'https://www.youtube.com/watch?v=INECerpBAzQ', FlxColor.fromRGB(182, 84, 82)],
-		['MoldyGH', '', 'Original composer of Insanity and Splitathon', 'https://twitter.com/moldy_gh', FlxColor.fromRGB(28, 14, 112)],
+		['tahirk', 'macxp', 'Made the mod', 'https://twitter.com/tahirkarabekir', FlxColor.fromRGB(182, 84, 82)],
+		[''],
+		['Insanity By'],
+		['MoldyGH', '', '', 'https://twitter.com/moldy_gh', FlxColor.fromRGB(28, 14, 112)],
 		[''],
 		['Original Songs'],
 		['title.wma', '', 'By Stan LePard', '', FlxColor.WHITE],
