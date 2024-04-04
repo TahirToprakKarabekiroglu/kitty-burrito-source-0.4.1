@@ -1,5 +1,6 @@
 package;
 
+import haxe.macro.Expr.Case;
 import lime.app.Application;
 #if desktop
 import Discord.DiscordClient;
@@ -649,6 +650,10 @@ class PlayState extends MusicBeatState
 			}});
 		}
 		super.create();
+
+		var song = Paths.formatToSongPath(SONG.song) == "silly-but-sad-cat-song";
+		if (song)
+			healthHurtValue = 0.004;
 	}
 	var healthString = "0.00000001";
 
@@ -1858,7 +1863,11 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		healthHurtValue += elapsed / (Paths.formatToSongPath(SONG.song) != "hold-your-insanity" ? (6000 * (Paths.formatToSongPath(SONG.song) == "we're-landing-at-last" ? 1.25 : 1)) : 15000);
+		if (Paths.formatToSongPath(SONG.song) != "silly-but-sad-cat-song")
+			healthHurtValue += elapsed / (Paths.formatToSongPath(SONG.song) != "hold-your-insanity" ? (6000 * (Paths.formatToSongPath(SONG.song) == "we're-landing-at-last" ? 1.25 : 1)) : 15000);
+		else
+			healthHurtValue += elapsed / 100000;
+
 		if (generatedMusic)
 		{
 			var fakeCrochet:Float = (60 / SONG.bpm) * 1000;
@@ -2015,7 +2024,7 @@ class PlayState extends MusicBeatState
 					if (health > healthHurtValue &&
 						Paths.formatToSongPath(SONG.song) != "ascending-insanity"
 						&& Paths.formatToSongPath(SONG.song) != "warmth-without-insanity" 
-						&& Paths.formatToSongPath(SONG.song) != "unholy-insanity-resonance" 
+						&& Paths.formatToSongPath(SONG.song) != "unholy-insanity-resonance"
 						&& (Paths.formatToSongPath(SONG.song) != "hold-your-insanity" || insanityHold >= 150)
 						&& !windowsXP)
 						health -= healthHurtValue;
@@ -2046,6 +2055,11 @@ class PlayState extends MusicBeatState
 
 				var doKill:Bool = daNote.y < -daNote.height;
 				if(ClientPrefs.downScroll) doKill = daNote.y > FlxG.height;
+				var song = Paths.formatToSongPath(SONG.song) == "silly-but-sad-cat-song";
+				if (song)
+				{
+					doKill = doKill && tweenCam == null;
+				}
 
 				if (doKill)
 				{
@@ -2383,18 +2397,51 @@ class PlayState extends MusicBeatState
 		callOnLuas('onEvent', [eventName, value1, value2]);
 	}
 
+	var initialCam:Bool = !!!false;
+	var tweenCam:FlxTween;
+	var tweenCam2:FlxTween;
 	function moveCameraSection(?id:Int = 0):Void {
 		if(SONG.notes[id] == null) return;
 
-		if (!SONG.notes[id].mustHitSection)
+		if (Paths.formatToSongPath(SONG.song) == "silly-but-sad-cat-song" && initialCam)
 		{
-			moveCamera(true);
-			callOnLuas('onMoveCamera', ['dad']);
+			if (SONG.notes[id].mustHitSection)
+			{
+				moveCamera(false);
+				if (tweenCam == null)
+				{
+					tweenCam = FlxTween.tween(camHUD, {angle: 180}, 0.8, {ease: FlxEase.expoInOut, onComplete: (twn) -> {
+						tweenCam = null;
+					}, onUpdate: (twn) -> {
+						
+					}});
+				}
+			}
+			else 
+			{
+				moveCamera(true);
+				if (tweenCam2 == null)
+				{
+					tweenCam2 = FlxTween.tween(camHUD, {angle: 0}, 0.8, {ease: FlxEase.expoInOut, onComplete: (twn) -> {
+						tweenCam2 = null;
+					}, onUpdate: (twn) -> {
+						
+					}});
+				}
+			}
 		}
 		else
 		{
-			moveCamera(false);
-			callOnLuas('onMoveCamera', ['boyfriend']);
+			if (!SONG.notes[id].mustHitSection)
+			{
+				moveCamera(true);
+				callOnLuas('onMoveCamera', ['dad']);
+			}
+			else
+			{
+				moveCamera(false);
+				callOnLuas('onMoveCamera', ['boyfriend']);
+			}
 		}
 	}
 
@@ -2753,21 +2800,22 @@ class PlayState extends MusicBeatState
 
 	private function keyShit():Void
 	{
+		var song = Paths.formatToSongPath(SONG.song) == "silly-but-sad-cat-song" && try SONG.notes[Std.int(curStep / 16)].mustHitSection catch (e) false && tweenCam == null;
 		// HOLDING
-		var up = controls.NOTE_UP;
-		var right = controls.NOTE_RIGHT;
-		var down = controls.NOTE_DOWN;
-		var left = controls.NOTE_LEFT;
+		var up = song ? controls.NOTE_DOWN : controls.NOTE_UP;
+		var right = song ? controls.NOTE_LEFT : controls.NOTE_RIGHT;
+		var down = song ? controls.NOTE_UP : controls.NOTE_DOWN;
+		var left = song ? controls.NOTE_RIGHT : controls.NOTE_LEFT;
 
-		var upP = controls.NOTE_UP_P;
-		var rightP = controls.NOTE_RIGHT_P;
-		var downP = controls.NOTE_DOWN_P;
-		var leftP = controls.NOTE_LEFT_P;
+		var upP = song ? controls.NOTE_DOWN_P : controls.NOTE_UP_P;
+		var rightP = song ? controls.NOTE_LEFT_P : controls.NOTE_RIGHT_P;
+		var downP = song ? controls.NOTE_UP_P : controls.NOTE_DOWN_P;
+		var leftP = song ? controls.NOTE_RIGHT_P : controls.NOTE_LEFT_P;
 
-		var upR = controls.NOTE_UP_R;
-		var rightR = controls.NOTE_RIGHT_R;
-		var downR = controls.NOTE_DOWN_R;
-		var leftR = controls.NOTE_LEFT_R;
+		var upR = song ? controls.NOTE_DOWN_R : controls.NOTE_UP_R;
+		var rightR = song ? controls.NOTE_LEFT_R : controls.NOTE_RIGHT_R;
+		var downR = song ? controls.NOTE_UP_R : controls.NOTE_DOWN_R;
+		var leftR = song ? controls.NOTE_RIGHT_R : controls.NOTE_LEFT_R;
 
 		var controlArray:Array<Bool> = [leftP, downP, upP, rightP];
 		var controlReleaseArray:Array<Bool> = [leftR, downR, upR, rightR];
@@ -2779,8 +2827,10 @@ class PlayState extends MusicBeatState
 			// rewritten inputs???
 			notes.forEachAlive(function(daNote:Note)
 			{
+				var data = daNote.noteData;
+				
 				// hold note functions
-				if (daNote.isSustainNote && controlHoldArray[daNote.noteData] && daNote.canBeHit 
+				if (daNote.isSustainNote && controlHoldArray[data] && daNote.canBeHit 
 				&& daNote.mustPress && !daNote.tooLate && !daNote.wasGoodHit) {
 					goodNoteHit(daNote);
 				}
@@ -2798,8 +2848,10 @@ class PlayState extends MusicBeatState
 						var sortedNotesList:Array<Note> = [];
 						notes.forEachAlive(function(daNote:Note)
 						{
+							var data = i;
+							
 							if (daNote.canBeHit && daNote.mustPress && !daNote.tooLate 
-							&& !daNote.wasGoodHit && daNote.noteData == i) {
+							&& !daNote.wasGoodHit && daNote.noteData == data) {
 								sortedNotesList.push(daNote);
 								notesDatas.push(daNote.noteData);
 								//canMiss = true;
@@ -2856,11 +2908,13 @@ class PlayState extends MusicBeatState
 
 		playerStrums.forEach(function(spr:StrumNote)
 		{
-			if(controlArray[spr.ID] && spr.animation.curAnim.name != 'confirm') {
+			var data = spr.ID;
+			
+			if(controlArray[data] && spr.animation.curAnim.name != 'confirm') {
 				spr.playAnim('pressed');
 				spr.resetAnim = 0;
 			}
-			if(controlReleaseArray[spr.ID]) {
+			if(controlReleaseArray[data]) {
 				spr.playAnim('static');
 				spr.resetAnim = 0;
 			}
@@ -3251,7 +3305,8 @@ class PlayState extends MusicBeatState
 		setOnLuas('curStep', curStep);
 		callOnLuas('onStepHit', []);
 		
-		if (generatedMusic && PlayState.SONG.notes[Std.int(curStep / 16)] != null && !endingSong && !isCameraOnForcedPos && !windowsXP && Paths.formatToSongPath(SONG.song) != "unholy-insanity-resonance" && Paths.formatToSongPath(SONG.song) != "fireflies-tell-insanity")
+		var song = Paths.formatToSongPath(SONG.song) == "silly-but-sad-cat-song";
+		if ((!song || curStep % 16 == 0) && generatedMusic && PlayState.SONG.notes[Std.int(curStep / 16)] != null && !endingSong && !isCameraOnForcedPos && !windowsXP && Paths.formatToSongPath(SONG.song) != "unholy-insanity-resonance" && Paths.formatToSongPath(SONG.song) != "fireflies-tell-insanity")
 		{
 			moveCameraSection(Std.int(curStep / 16));
 		}

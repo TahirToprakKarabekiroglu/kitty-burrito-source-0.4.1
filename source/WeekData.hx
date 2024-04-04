@@ -171,6 +171,7 @@ class WeekData {
 				["Insanity", "burito", [255, 255, 255]],
 				["Warmth Without Insanity", "burito", [255, 255, 255]],
 				["We're Landing At Last", "burito", [255, 255, 255]],
+				["Silly but Sad Cat Song", "burito", [255, 255, 255]],
 			];
 			if (FlxG.save.data.finishedFirstSong && FlxG.save.data.finishedSecondSong && FlxG.save.data.finishedThirdSong)
 			{
