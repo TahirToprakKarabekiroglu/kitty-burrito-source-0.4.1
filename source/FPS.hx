@@ -62,10 +62,10 @@ class FPS extends TextField
 			times.shift();
 		}
 
-		if (PlayState.SONG != null && PlayState.SONG.song == 'title.wma')
+		if (PlayState.SONG != null && (PlayState.SONG.song == 'title.wma' || PlayState.curStage == 'resonance'))
 			visible = false;
 		else
-			visible = true;
+			visible = ClientPrefs.showFPS;
 
 		var currentCount = times.length;
 		currentFPS = Math.round((currentCount + cacheCount) / 2);

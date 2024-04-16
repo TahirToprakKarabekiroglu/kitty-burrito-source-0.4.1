@@ -32,10 +32,11 @@ class CreditsState extends MusicBeatState
 		[''],
 		['Original Songs'],
 		['title.wma', '', 'By Stan LePard', '', FlxColor.WHITE],
-		['HOME', '', 'By HOME', '', FlxColor.WHITE],
+		['Resonance', '', 'By HOME', '', FlxColor.WHITE],
 		['Fireflies', '', 'By Adam Young', '', FlxColor.WHITE],
 		['Hold Your Colour', '', 'By Pendulum', '', FlxColor.WHITE],
 		['Higher', '', "By Tobu", '', FlxColor.WHITE],
+		['nyan', '', 'By Christopher Torres and Daniwell-P', '', FlxColor.WHITE],
 		[''],
 		['Psych Engine Team'],
 		['Shadow Mario',		'shadowmario',		'Main Programmer of Psych Engine',					'https://twitter.com/Shadow_Mario_',	0xFFFFDD33],
@@ -142,7 +143,7 @@ class CreditsState extends MusicBeatState
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			MusicBeatState.switchState(new MainMenuState());
 		}
-		if(controls.ACCEPT) {
+		if(controls.ACCEPT && creditsStuff[curSelected][3] != '') {
 			CoolUtil.browserLoad(creditsStuff[curSelected][3]);
 		}
 		super.update(elapsed);

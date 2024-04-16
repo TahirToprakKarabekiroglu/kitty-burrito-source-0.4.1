@@ -31,6 +31,8 @@ class Note extends FlxSprite
 	public var eventName:String = '';
 	public var eventVal1:String = '';
 	public var eventVal2:String = '';
+	
+	public var yMult:Float = 0.45;
 
 	public var colorSwap:ColorSwap;
 	public var inEditor:Bool = false;
@@ -175,7 +177,6 @@ class Note extends FlxSprite
 			}
 
 			updateHitbox();
-
 			offsetX -= width / 2;
 
 			if (PlayState.isPixelStage)
@@ -196,6 +197,7 @@ class Note extends FlxSprite
 				}
 
 				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.05 * PlayState.SONG.speed;
+
 				if(PlayState.isPixelStage) {
 					prevNote.scale.y *= 1.19;
 				}
@@ -212,6 +214,7 @@ class Note extends FlxSprite
 		}
 	}
 
+	var lastScaleY:Float;
 	function reloadNote(?prefix:String = '', ?texture:String = '', ?suffix:String = '') {
 		if(prefix == null) prefix = '';
 		if(texture == null) texture = '';
@@ -233,7 +236,7 @@ class Note extends FlxSprite
 		var arraySkin:Array<String> = skin.split('/');
 		arraySkin[arraySkin.length-1] = prefix + arraySkin[arraySkin.length-1] + suffix;
 
-		var lastScaleY:Float = scale.y;
+		lastScaleY = scale.y;
 		var blahblah:String = arraySkin.join('/');
 		if(PlayState.isPixelStage) {
 			if(isSustainNote) {
@@ -290,6 +293,12 @@ class Note extends FlxSprite
 
 		setGraphicSize(Std.int(width * 0.7));
 		updateHitbox();
+
+		if (PlayState.curStage == 'resonance')
+		{
+			scale.scale(0.5, 0.5);
+		//	updateHitbox();
+		}
 	}
 
 	function loadPixelNoteAnims() {

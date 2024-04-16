@@ -98,7 +98,8 @@ class FreeplayState extends MusicBeatState
 
 		for (i in 0...songs.length)
 		{
-			var song = ["title.wma", "Unholy Insanity Resonance", "Fireflies Tell Insanity", "Hold Your Insanity", "Insanity Found in Ruins", "We're Landing At Last", "Warmth Without Insanity", "Higher", "Silly but Sad Cat Song"];
+			var song = ["title.wma", "Unholy Insanity Resonance", "Fireflies Tell Insanity", "Hold Your Insanity", "Insanity Found in Ruins", "We're Landing At Last", "Warmth Without Insanity", "Higher", "Insanity", "Silly but Sad Cat Song", "nyan", "Adequate Insanity", "Please Don't"];
+			var song2 = ["Insanity", "We're Landing At Last", "Warmth Without Insanity", "Silly but Sad Cat Song", "Adequate Insanity", "Please Don't"];
 			var songText:Alphabet = new Alphabet(0, (70 * i) + (songs[i].songName != 'title.wma' ? 30 : -70), songs[i].songName, !song.contains(songs[i].songName), false);
 			if (song.contains(songs[i].songName))
 				songText.yAdd = -60;
@@ -109,9 +110,9 @@ class FreeplayState extends MusicBeatState
 			Paths.currentModDirectory = songs[i].folder;
 			var icon:HealthIcon = new HealthIcon(songs[i].songCharacter);
 			icon.sprTracker = songText;
-			if (song.contains(songs[i].songName) && songs[i].songName != "We're Landing At Last" && songs[i].songName != "Warmth Without Insanity")
+			if (song.contains(songs[i].songName) && !song2.contains(songs[i].songName))
 				icon.visible = false;
-			if (songs[i].songName == "We're Landing At Last" || songs[i].songName == "Warmth Without Insanity")
+			if (song2.contains(songs[i].songName))
 				icon.offset.y -= 50;
 
 			// using a FlxGroup is too much fuss!

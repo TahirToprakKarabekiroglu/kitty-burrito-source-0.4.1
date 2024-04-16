@@ -24,9 +24,10 @@ class FlashingState extends MusicBeatState
 		add(bg);
 
 		warnText = new FlxText(0, 0, FlxG.width,
-			"Hey, watch out!\n
-			This mod contains cat!\n
-			You may now continue.",
+			"This mod contains contains remakes
+			of my favorite songs.\nThey were added just for fun.
+			\nOriginal ones can be found in credits and beginning of the songs.
+			\nPress ENTER to continue.",
 			32);
 		warnText.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, CENTER);
 		warnText.screenCenter(Y);

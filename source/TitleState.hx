@@ -92,7 +92,7 @@ class TitleState extends MusicBeatState
 			return;
 		}
 
-		FlxG.save.bind('funkin', 'tahirk786');
+		FlxG.save.bind('funkin', 'tahirk');
 		ClientPrefs.loadPrefs();
 
 		Highscore.load();

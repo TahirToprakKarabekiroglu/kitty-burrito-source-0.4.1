@@ -170,12 +170,16 @@ class WeekData {
 			var song:Array<Array<Dynamic>> = [
 				["Insanity", "burito", [255, 255, 255]],
 				["Warmth Without Insanity", "burito", [255, 255, 255]],
+				["Adequate Insanity", "burito", [255, 255, 255]],
 				["We're Landing At Last", "burito", [255, 255, 255]],
 				["Silly but Sad Cat Song", "burito", [255, 255, 255]],
+				["Please Don't", "burito", [255, 255, 255]],
 			];
-			if (FlxG.save.data.finishedFirstSong && FlxG.save.data.finishedSecondSong && FlxG.save.data.finishedThirdSong)
+			if (FlxG.save.data.finishedFirstSong && FlxG.save.data.finishedSecondSong && FlxG.save.data.finishedThirdSong
+				&& FlxG.save.data.finishedForthSong && FlxG.save.data.finishedFifthSong && FlxG.save.data.finishedSixthSong)
 			{
 				song.push(["title.wma", "", [177, 255, 0]]);
+				song.push(["nyan", "", [255, 255, 255]]);
 				song.push(["Unholy Insanity Resonance", "", [255, 255, 255]]);
 				song.push(["Fireflies Tell Insanity", "", [3, 158, 240]]);
 				song.push(["Hold Your Insanity", "", [51, 107, 104]]);

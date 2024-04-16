@@ -76,6 +76,7 @@ class StrumNote extends FlxSprite
 				}});
 		}
 		animation.play(anim, force);
+		centerOrigin();
 		centerOffsets();
 		if(animation.curAnim.name == 'static') {
 			colorSwap.hue = 0;
@@ -103,10 +104,7 @@ class StrumNote extends FlxSprite
 
 	function updateConfirmOffset() { //TO DO: Find a calc to make the offset work fine on other angles
 		centerOffsets();
-		offset.x -= 13;
-		offset.y -= 13;
-
-		offset.y *= scale.y / ogScale;
+		centerOrigin();
 	}
 
 	function set_multAlpha(value:Float):Float 
