@@ -42,8 +42,6 @@ class OptionsState extends MusicBeatState
 
 		menuBG = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		menuBG.color = 0xFFea71fd;
-		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
-		menuBG.updateHitbox();
 		menuBG.screenCenter();
 		menuBG.antialiasing = ClientPrefs.globalAntialiasing;
 		add(menuBG);
@@ -404,17 +402,18 @@ class ControlsSubstate extends MusicBeatSubstate {
 		ClientPrefs.keyBinds[1][1],
 		ClientPrefs.keyBinds[2][1],
 		ClientPrefs.keyBinds[3][1],
+		ClientPrefs.keyBinds[4][1],
 		'',
 		'UI',
-		ClientPrefs.keyBinds[4][1],
 		ClientPrefs.keyBinds[5][1],
 		ClientPrefs.keyBinds[6][1],
 		ClientPrefs.keyBinds[7][1],
-		'',
 		ClientPrefs.keyBinds[8][1],
+		'',
 		ClientPrefs.keyBinds[9][1],
 		ClientPrefs.keyBinds[10][1],
 		ClientPrefs.keyBinds[11][1],
+		ClientPrefs.keyBinds[12][1],
 		'',
 		defaultKey];
 
@@ -423,7 +422,7 @@ class ControlsSubstate extends MusicBeatSubstate {
 	private var controlArray:Array<FlxKey> = [];
 	var rebindingKey:Int = -1;
 	var nextAccept:Int = 5;
-
+	
 	public function new() {
 		super();
 		grpOptions = new FlxTypedGroup<Alphabet>();
@@ -678,7 +677,6 @@ class PreferencesSubstate extends MusicBeatSubstate
 		'Persistent Cached Data',
 		'GAMEPLAY',
 		'Downscroll',
-		'Middlescroll',
 		'Ghost Tapping',
 		'Note Delay',
 		'Hide HUD',
@@ -851,9 +849,6 @@ class PreferencesSubstate extends MusicBeatSubstate
 					case 'Downscroll':
 						ClientPrefs.downScroll = !ClientPrefs.downScroll;
 
-					case 'Middlescroll':
-						ClientPrefs.middleScroll = !ClientPrefs.middleScroll;
-
 					case 'Ghost Tapping':
 						ClientPrefs.ghostTapping = !ClientPrefs.ghostTapping;
 
@@ -932,8 +927,6 @@ class PreferencesSubstate extends MusicBeatSubstate
 				daText = "If unchecked, disables anti-aliasing, increases performance\nat the cost of the graphics not looking as smooth.";
 			case 'Downscroll':
 				daText = "If checked, notes go Down instead of Up, simple enough.";
-			case 'Middlescroll':
-				daText = "If checked, hides Opponent's notes and your notes get centered.";
 			case 'Ghost Tapping':
 				daText = "If checked, you won't get misses from pressing keys\nwhile there are no notes able to be hit.";
 			case 'Swearing':
@@ -1002,8 +995,6 @@ class PreferencesSubstate extends MusicBeatSubstate
 						daValue = ClientPrefs.flashingCar;
 					case 'Downscroll':
 						daValue = ClientPrefs.downScroll;
-					case 'Middlescroll':
-						daValue = ClientPrefs.middleScroll;
 					case 'Ghost Tapping':
 						daValue = ClientPrefs.ghostTapping;
 					case 'Swearing':

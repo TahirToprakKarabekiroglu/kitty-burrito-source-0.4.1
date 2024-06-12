@@ -65,9 +65,9 @@
 	"healthicon": "burito",
 	"flip_x": false,
 	"healthbar_colors": [
-		16,
-		6,
-		4
+		123,
+		109,
+		146
 	],
 	"camera_position": [
 		170,

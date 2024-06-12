@@ -3,7 +3,7 @@
 		{
 			"loop": false,
 			"offsets": [
-				0,
+				-6,
 				0
 			],
 			"anim": "idle",
@@ -12,20 +12,53 @@
 			"indices": []
 		},
 		{
-			"loop": false,
 			"offsets": [
 				22,
-				-7
+				-6
 			],
-			"anim": "singLEFT",
+			"loop": false,
 			"fps": 24,
-			"name": "BF NOTE LEFT0",
-			"indices": []
+			"anim": "singLEFTmiss",
+			"indices": [],
+			"name": "miss left"
+		},
+		{
+			"offsets": [
+				-40,
+				-6
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singRIGHTmiss",
+			"indices": [],
+			"name": "miss right"
+		},
+		{
+			"offsets": [
+				6,
+				-53
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singDOWNmiss",
+			"indices": [],
+			"name": "miss down"
+		},
+		{
+			"offsets": [
+				-13,
+				33
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singUPmiss",
+			"indices": [],
+			"name": "miss up"
 		},
 		{
 			"loop": false,
 			"offsets": [
-				-10,
+				-2,
 				-50
 			],
 			"anim": "singDOWN",
@@ -36,8 +69,8 @@
 		{
 			"loop": false,
 			"offsets": [
-				-3,
-				27
+				-9,
+				32
 			],
 			"anim": "singUP",
 			"fps": 24,
@@ -47,8 +80,8 @@
 		{
 			"loop": false,
 			"offsets": [
-				-38,
-				-7
+				-42,
+				-6
 			],
 			"anim": "singRIGHT",
 			"fps": 24,
@@ -58,63 +91,52 @@
 		{
 			"loop": false,
 			"offsets": [
-				19,
-				18
+				495,
+				295
 			],
-			"anim": "singLEFTmiss",
+			"anim": "deathConfirm",
 			"fps": 24,
-			"name": "BF NOTE LEFT MISS",
+			"name": "BF Dead confirm",
 			"indices": []
 		},
 		{
-			"loop": false,
 			"offsets": [
-				-11,
-				-19
+				17,
+				-6
 			],
-			"anim": "singDOWNmiss",
+			"loop": false,
 			"fps": 24,
-			"name": "BF NOTE DOWN MISS",
-			"indices": []
+			"anim": "singLEFT",
+			"indices": [],
+			"name": "BF NOTE LEFT0"
 		},
 		{
-			"loop": false,
 			"offsets": [
-				-22,
-				24
+				-8,
+				-8
 			],
-			"anim": "singUPmiss",
+			"loop": false,
 			"fps": 24,
-			"name": "BF NOTE UP MISS",
-			"indices": []
+			"anim": "singMIDDLE",
+			"indices": [],
+			"name": "BF NOTE MIDDLE0"
 		},
 		{
-			"loop": false,
 			"offsets": [
-				-47,
-				19
+				6,
+				5
 			],
-			"anim": "singRIGHTmiss",
-			"fps": 24,
-			"name": "BF NOTE RIGHT MISS",
-			"indices": []
-		},
-		{
 			"loop": false,
-			"offsets": [
-				-3,
-				11
-			],
-			"anim": "firstDeath",
 			"fps": 24,
-			"name": "BF dies",
-			"indices": []
+			"anim": "hey",
+			"indices": [],
+			"name": "BF HEY!!"
 		},
 		{
 			"loop": true,
 			"offsets": [
-				-3,
-				5
+				1,
+				1
 			],
 			"anim": "deathLoop",
 			"fps": 24,
@@ -124,12 +146,12 @@
 		{
 			"loop": false,
 			"offsets": [
-				-3,
-				69
+				-10,
+				-10
 			],
-			"anim": "deathConfirm",
+			"anim": "firstDeath",
 			"fps": 24,
-			"name": "BF Dead confirm",
+			"name": "BF dies",
 			"indices": []
 		}
 	],

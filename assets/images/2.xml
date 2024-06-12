@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="2.png">
+	<!-- Created with Adobe Animate version 22.0.8.217 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="sustain cover0000" x="2" y="2" width="161" height="125"/>
+	<SubTexture name="sustain cover0001" x="2" y="129" width="134" height="108" frameX="-11" frameY="-12" frameWidth="161" frameHeight="125"/>
+	<SubTexture name="sustain cover0002" x="138" y="129" width="99" height="85" frameX="-30" frameY="-19" frameWidth="161" frameHeight="125"/>
+</TextureAtlas>

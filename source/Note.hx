@@ -24,6 +24,8 @@ class Note extends FlxSprite
 	public var noteWasHit:Bool = false;
 	public var prevNote:Note;
 
+	public var willMiss:Bool;
+
 	public var sustainLength:Float = 0;
 	public var isSustainNote:Bool = false;
 	public var noteType(default, set):String = null;
@@ -44,6 +46,8 @@ class Note extends FlxSprite
 	public static var BLUE_NOTE:Int = 1;
 	public static var RED_NOTE:Int = 3;
 
+	public static var earlyHitMultMinus(default, set):Float = 0;
+
 	// Lua shit
 	public var noteSplashDisabled:Bool = false;
 	public var noteSplashTexture:String = null;
@@ -58,8 +62,12 @@ class Note extends FlxSprite
 
 	public var copyX:Bool = true;
 	public var copyY:Bool = true;
-	public var copyAngle:Bool = true;
+	public var copyAngle:Bool = false;
 	public var copyAlpha:Bool = true;
+
+	public var noteLength:Int = 0;
+
+	public var angleMult:Float = FlxG.random.bool() ? -1 : 1;
 
 	public var hitHealth:Float = 0.023;
 	public var missHealth:Float = 0.0475;
@@ -92,7 +100,7 @@ class Note extends FlxSprite
 				case 'Kitty Note':
 					if (!isSustainNote)
 					{
-						ignoreNote = mustPress;
+						ignoreNote = true;
 						copyAlpha = false;
 						earlyHitMult = 0.25;
 						reloadNote('kity', 'Notes');
@@ -100,8 +108,16 @@ class Note extends FlxSprite
 						colorSwap.hue = 0;
 						colorSwap.saturation = 0;
 						colorSwap.brightness = 0;
-						earlyHitMult = 0.25;
+						earlyHitMult = 0.2;
 					}
+				case 'Middle Note':
+					ignoreNote = mustPress;
+					copyAlpha = false;
+					reloadNote('burrito', 'Note');
+					noteSplashTexture = null;
+					colorSwap.hue = 0;
+					colorSwap.saturation = 0;
+					colorSwap.brightness = 0;
 			}
 			noteType = value;
 		}
@@ -122,7 +138,7 @@ class Note extends FlxSprite
 		isSustainNote = sustainNote;
 		this.inEditor = inEditor;
 
-		x += (ClientPrefs.middleScroll ? PlayState.STRUM_X_MIDDLESCROLL : PlayState.STRUM_X) + 50;
+		x += (PlayState.STRUM_X) + 50;
 		// MAKE SURE ITS DEFINITELY OFF SCREEN?
 		y -= 2000;
 		this.strumTime = strumTime;
@@ -211,6 +227,8 @@ class Note extends FlxSprite
 			}
 		} else if(!isSustainNote) {
 			earlyHitMult = 1;
+			if (PlayState.leftSide)
+				earlyHitMult -= FlxG.random.float(0.4, 0.5);
 		}
 	}
 
@@ -340,9 +358,15 @@ class Note extends FlxSprite
 		{
 			if (mustPress)
 			{
+				var earlyHitMultMinus = Note.earlyHitMultMinus;
+				if (isSustainNote)
+					earlyHitMultMinus = 0;
+				else if (noteType == 'Middle Note')
+					earlyHitMultMinus = 0;
+
 				// ok river
 				if (strumTime > Conductor.songPosition - Conductor.safeZoneOffset
-					&& strumTime < Conductor.songPosition + (Conductor.safeZoneOffset * earlyHitMult))
+					&& strumTime < Conductor.songPosition + (Conductor.safeZoneOffset * (earlyHitMult - earlyHitMultMinus)))
 					canBeHit = true;
 				else
 					canBeHit = false;
@@ -361,5 +385,15 @@ class Note extends FlxSprite
 			if (alpha > 0.3)
 				alpha = 0.3;
 		}
+	}
+
+	static function set_earlyHitMultMinus(value:Float):Float 
+	{
+		if (value < 0)
+			value = 0;
+		else if (value > 1)
+			value = 1;
+
+		return earlyHitMultMinus = value;
 	}
 }

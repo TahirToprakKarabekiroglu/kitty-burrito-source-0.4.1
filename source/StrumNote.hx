@@ -9,6 +9,7 @@ using StringTools;
 
 class StrumNote extends FlxSprite
 {
+	public var randomOne:Float = FlxG.random.bool() ? 1 : -1;
 	public var ogScale:Float;
 	public var multAlpha(default, set):Float = 1;
 	public var shouldChangeAlpha:Bool = false;
@@ -18,7 +19,9 @@ class StrumNote extends FlxSprite
 
 	private var colorSwap:ColorSwap;
 	public var resetAnim:Float = 0;
-	private var noteData:Int = 0;
+	public var noteData:Int = 0;
+
+	public var holdSprite:FlxSprite;
 
 	public function new(x:Float, y:Float, leData:Int) {
 		colorSwap = new ColorSwap();
@@ -78,14 +81,17 @@ class StrumNote extends FlxSprite
 		animation.play(anim, force);
 		centerOrigin();
 		centerOffsets();
-		if(animation.curAnim.name == 'static') {
+		if(animation.curAnim != null && animation.curAnim.name == 'static') {
 			colorSwap.hue = 0;
 			colorSwap.saturation = 0;
 			colorSwap.brightness = 0;
 		} else {
-			colorSwap.hue = ClientPrefs.arrowHSV[noteData % 4][0] / 360;
-			colorSwap.saturation = ClientPrefs.arrowHSV[noteData % 4][1] / 100;
-			colorSwap.brightness = ClientPrefs.arrowHSV[noteData % 4][2] / 100;
+			if (noteData != 4)
+			{
+				colorSwap.hue = ClientPrefs.arrowHSV[noteData % 4][0] / 360;
+				colorSwap.saturation = ClientPrefs.arrowHSV[noteData % 4][1] / 100;
+				colorSwap.brightness = ClientPrefs.arrowHSV[noteData % 4][2] / 100;
+			}
 
 			if(animation.curAnim.name == 'confirm' && !PlayState.isPixelStage) {
 				updateConfirmOffset();

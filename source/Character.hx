@@ -170,6 +170,7 @@ class Character extends FlxSprite
 		}
 		originalFlipX = flipX;
 
+		updateHitbox();
 		recalculateDanceIdle();
 		dance();
 
@@ -221,17 +222,28 @@ class Character extends FlxSprite
 				dance();
 			}
 
-			if (!isPlayer)
+			if (((!isPlayer && !PlayState.leftSide) || (isPlayer && PlayState.leftSide)) && !specialAnim)
 			{
 				if (animation.curAnim.name.startsWith('sing'))
 				{
 					holdTimer += elapsed;
 				}
 
-				if (holdTimer >= Conductor.stepCrochet * (Paths.formatToSongPath(PlayState.SONG.song) == 'beginning-of-a-new-insanity' ? 3 : 1) * 0.001 * singDuration)
+				if (holdTimer >= Conductor.stepCrochet * 0.001 * singDuration)
 				{
 					dance();
 					holdTimer = 0;
+				}
+			}
+
+			if (((!isPlayer && PlayState.leftSide)) && !specialAnim)
+			{
+				if (!animation.curAnim.name.endsWith('miss')
+					&& animation.curAnim.name.startsWith('sing')
+					&& !isPlayer
+					&& PlayState.leftSide)
+				{
+					holdTimer += elapsed;
 				}
 			}
 
@@ -245,6 +257,7 @@ class Character extends FlxSprite
 
 	public var danced:Bool = false;
 
+	public var canPlay:Bool = true;
 	/**
 	 * FOR GF DANCING SHIT
 	 */
@@ -269,7 +282,10 @@ class Character extends FlxSprite
 
 	public function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void
 	{
-		if (specialAnim)
+		if (!canPlay)
+			return;
+
+		if (specialAnim || !animation.exists(AnimName))
 			return;
 		
 		specialAnim = false;

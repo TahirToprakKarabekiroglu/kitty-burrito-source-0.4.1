@@ -30,14 +30,17 @@ enum abstract Action(String) to String from String
 	var NOTE_LEFT = "note_left";
 	var NOTE_RIGHT = "note_right";
 	var NOTE_DOWN = "note_down";
+	var NOTE_MIDDLE = "note_middle";
 	var NOTE_UP_P = "note_up-press";
 	var NOTE_LEFT_P = "note_left-press";
 	var NOTE_RIGHT_P = "note_right-press";
 	var NOTE_DOWN_P = "note_down-press";
+	var NOTE_MIDDLE_P = "note_middle-press";
 	var NOTE_UP_R = "note_up-release";
 	var NOTE_LEFT_R = "note_left-release";
 	var NOTE_RIGHT_R = "note_right-release";
 	var NOTE_DOWN_R = "note_down-release";
+	var NOTE_MIDDLE_R = "note_middle-release";
 	var ACCEPT = "accept";
 	var BACK = "back";
 	var PAUSE = "pause";
@@ -99,6 +102,7 @@ enum Control
 	NOTE_LEFT;
 	NOTE_RIGHT;
 	NOTE_DOWN;
+	NOTE_MIDDLE;
 	RESET;
 	ACCEPT;
 	BACK;
@@ -133,13 +137,16 @@ class Controls extends FlxActionSet
 	var _ui_downR = new FlxActionDigital(Action.UI_DOWN_R);
 	var _note_up = new FlxActionDigital(Action.NOTE_UP);
 	var _note_left = new FlxActionDigital(Action.NOTE_LEFT);
+	var _note_middle = new FlxActionDigital(Action.NOTE_MIDDLE);
 	var _note_right = new FlxActionDigital(Action.NOTE_RIGHT);
 	var _note_down = new FlxActionDigital(Action.NOTE_DOWN);
 	var _note_upP = new FlxActionDigital(Action.NOTE_UP_P);
 	var _note_leftP = new FlxActionDigital(Action.NOTE_LEFT_P);
+	var _note_middleP = new FlxActionDigital(Action.NOTE_MIDDLE_P);
 	var _note_rightP = new FlxActionDigital(Action.NOTE_RIGHT_P);
 	var _note_downP = new FlxActionDigital(Action.NOTE_DOWN_P);
 	var _note_upR = new FlxActionDigital(Action.NOTE_UP_R);
+	var _note_middleR = new FlxActionDigital(Action.NOTE_MIDDLE_R);
 	var _note_leftR = new FlxActionDigital(Action.NOTE_LEFT_R);
 	var _note_rightR = new FlxActionDigital(Action.NOTE_RIGHT_R);
 	var _note_downR = new FlxActionDigital(Action.NOTE_DOWN_R);
@@ -237,6 +244,11 @@ class Controls extends FlxActionSet
 	inline function get_NOTE_DOWN()
 		return _note_down.check();
 
+	public var NOTE_MIDDLE(get, never):Bool;
+
+	inline function get_NOTE_MIDDLE()
+		return _note_middle.check();
+
 	public var NOTE_UP_P(get, never):Bool;
 
 	inline function get_NOTE_UP_P()
@@ -257,6 +269,11 @@ class Controls extends FlxActionSet
 	inline function get_NOTE_DOWN_P()
 		return _note_downP.check();
 
+	public var NOTE_MIDDLE_P(get, never):Bool;
+
+	inline function get_NOTE_MIDDLE_P()
+		return _note_middleP.check();
+
 	public var NOTE_UP_R(get, never):Bool;
 
 	inline function get_NOTE_UP_R()
@@ -276,6 +293,11 @@ class Controls extends FlxActionSet
 
 	inline function get_NOTE_DOWN_R()
 		return _note_downR.check();
+
+	public var NOTE_MIDDLE_R(get, never):Bool;
+
+	inline function get_NOTE_MIDDLE_R()
+		return _note_middleR.check();
 
 	public var ACCEPT(get, never):Bool;
 
@@ -318,14 +340,17 @@ class Controls extends FlxActionSet
 		add(_note_left);
 		add(_note_right);
 		add(_note_down);
+		add(_note_middle);
 		add(_note_upP);
 		add(_note_leftP);
 		add(_note_rightP);
 		add(_note_downP);
+		add(_note_middleP);
 		add(_note_upR);
 		add(_note_leftR);
 		add(_note_rightR);
 		add(_note_downR);
+		add(_note_middleR);
 		add(_accept);
 		add(_back);
 		add(_pause);
@@ -422,6 +447,7 @@ class Controls extends FlxActionSet
 			case NOTE_DOWN: _note_down;
 			case NOTE_LEFT: _note_left;
 			case NOTE_RIGHT: _note_right;
+			case NOTE_MIDDLE: _note_middle;
 			case ACCEPT: _accept;
 			case BACK: _back;
 			case PAUSE: _pause;
@@ -477,6 +503,10 @@ class Controls extends FlxActionSet
 				func(_note_down, PRESSED);
 				func(_note_downP, JUST_PRESSED);
 				func(_note_downR, JUST_RELEASED);
+			case NOTE_MIDDLE:
+				func(_note_middle, PRESSED);
+				func(_note_middleP, JUST_PRESSED);
+				func(_note_middleR, JUST_RELEASED);
 			case ACCEPT:
 				func(_accept, JUST_PRESSED);
 			case BACK:

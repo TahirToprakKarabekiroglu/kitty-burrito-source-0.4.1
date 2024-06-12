@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="nyaburrito.png">
+<SubTexture name="idle0000" x="0" y="0" width="294" height="116" frameX="0" frameY="-60" frameWidth="400" frameHeight="234" />
+<SubTexture name="idle0001" x="0" y="116" width="299" height="116" frameX="0" frameY="-60" frameWidth="400" frameHeight="234" />
+<SubTexture name="idle0002" x="0" y="232" width="299" height="116" frameX="0" frameY="-66" frameWidth="400" frameHeight="234" />
+<SubTexture name="idle0003" x="0" y="348" width="299" height="116" frameX="0" frameY="-66" frameWidth="400" frameHeight="234" />
+<SubTexture name="idle0004" x="0" y="464" width="293" height="116" frameX="0" frameY="-66" frameWidth="400" frameHeight="234" />
+<SubTexture name="idle0005" x="0" y="580" width="293" height="116" frameX="0" frameY="-66" frameWidth="400" frameHeight="234" />
+<SubTexture name="idle0006" x="0" y="696" width="294" height="116" frameX="0" frameY="-60" frameWidth="400" frameHeight="234" />
+</TextureAtlas>

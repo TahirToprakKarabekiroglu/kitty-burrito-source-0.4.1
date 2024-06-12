@@ -18,9 +18,9 @@ class FPS extends TextField
 	/**
 		The current frame rate, expressed using frames-per-second
 	**/
-	public var currentFPS(default, null):Int;
+	public var currentFPS:Int;
 
-	@:noCompletion private var cacheCount:Int;
+	@:noCompletion public var cacheCount:Int;
 	@:noCompletion private var currentTime:Float;
 	@:noCompletion private var times:Array<Float>;
 
@@ -34,7 +34,7 @@ class FPS extends TextField
 		currentFPS = 0;
 		selectable = false;
 		mouseEnabled = false;
-		defaultTextFormat = new TextFormat("_sans", 12, color);
+		defaultTextFormat = new TextFormat(Paths.font("tahoma.ttf"), 25, color);
 		text = "Burritos: ";
 
 		cacheCount = 0;
@@ -62,15 +62,19 @@ class FPS extends TextField
 			times.shift();
 		}
 
-		if (PlayState.SONG != null && (PlayState.SONG.song == 'title.wma' || PlayState.curStage == 'resonance'))
+		if (PlayState.SONG != null && (PlayState.SONG.song == 'title.wma' || PlayState.curStage == 'resonance') && (FlxG.state is PlayState))
 			visible = false;
 		else
 			visible = ClientPrefs.showFPS;
 
 		var currentCount = times.length;
 		currentFPS = Math.round((currentCount + cacheCount) / 2);
+		if (currentFPS > 60)
+			currentFPS = 60;
 
-		if (currentCount != cacheCount /*&& visible*/)
+		if (PlayState.SONG != null && PlayState.SONG.song == "nyan" && (FlxG.state is PlayState))
+			text = "nyan: nyan";
+		else if (currentCount != cacheCount /*&& visible*/)
 		{
 			text = "Burritos: " + currentFPS;
 

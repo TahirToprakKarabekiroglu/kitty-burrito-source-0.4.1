@@ -34,6 +34,9 @@ class PauseSubState extends MusicBeatSubstate
 		super();
 		menuItems = menuItemsOG;
 
+		if (!PlayState.isStoryMode && Paths.formatToSongPath(PlayState.SONG.song) != "insanity-infusion")
+			menuItemsOG.insert(2, "Switch Character");
+
 		for (i in 0...CoolUtil.difficultyStuff.length) {
 			var diff:String = '' + CoolUtil.difficultyStuff[i][0];
 			difficultyChoices.push(diff);
@@ -64,6 +67,8 @@ class PauseSubState extends MusicBeatSubstate
 		levelDifficulty.setFormat(Paths.font('vcr.ttf'), 32);
 		levelDifficulty.updateHitbox();
 		add(levelDifficulty);
+		if (PlayState.SONG.song == "nyan")
+			levelDifficulty.text = "nyan";
 
 		var blueballedTxt:FlxText = new FlxText(20, 15 + 64, 0, "", 32);
 		blueballedTxt.text = "Burrito'd: " + PlayState.deathCounter;
@@ -71,6 +76,8 @@ class PauseSubState extends MusicBeatSubstate
 		blueballedTxt.setFormat(Paths.font('vcr.ttf'), 32);
 		blueballedTxt.updateHitbox();
 		add(blueballedTxt);
+		if (PlayState.SONG.song == "nyan")
+			blueballedTxt.text = "nyan";
 
 		practiceText = new FlxText(20, 15 + 101, 0, "PRACTICE MODE", 32);
 		practiceText.scrollFactor.set();
@@ -79,6 +86,8 @@ class PauseSubState extends MusicBeatSubstate
 		practiceText.updateHitbox();
 		practiceText.visible = PlayState.practiceMode;
 		add(practiceText);
+		if (PlayState.SONG.song == "nyan")
+			practiceText.text = "nyan";
 
 		botplayText = new FlxText(20, FlxG.height - 40, 0, "BOTPLAY", 32);
 		botplayText.scrollFactor.set();
@@ -87,6 +96,8 @@ class PauseSubState extends MusicBeatSubstate
 		botplayText.updateHitbox();
 		botplayText.visible = PlayState.cpuControlled;
 		add(botplayText);
+		if (PlayState.SONG.song == "nyan")
+			botplayText.text = "nyan";
 
 		blueballedTxt.alpha = 0;
 		levelDifficulty.alpha = 0;
@@ -106,7 +117,7 @@ class PauseSubState extends MusicBeatSubstate
 
 		for (i in 0...menuItems.length)
 		{
-			var songText:Alphabet = new Alphabet(0, (70 * i) + 30, menuItems[i], true, false);
+			var songText:Alphabet = new Alphabet(0, (70 * i) + 30, PlayState.SONG.song == "nyan" ? "nyan" : menuItems[i], true, false);
 			songText.isMenuItem = true;
 			songText.targetY = i;
 			grpMenuShit.add(songText);
@@ -170,6 +181,15 @@ class PauseSubState extends MusicBeatSubstate
 					CustomFadeTransition.nextCamera = transCamera;
 					MusicBeatState.resetState();
 					FlxG.sound.music.volume = 0;
+				case "Switch Character":
+					PlayState.leftSide = !PlayState.leftSide;
+					if (PlayState.leftSide)
+						FreeplayState.character = "Burrito Kitty";
+					else 
+						FreeplayState.character = "BurritoFriend";
+					CustomFadeTransition.nextCamera = transCamera;
+					MusicBeatState.resetState();
+					FlxG.sound.music.volume = 0;
 				case 'Botplay':
 					PlayState.cpuControlled = !PlayState.cpuControlled;
 					PlayState.usedPractice = true;
@@ -177,6 +197,7 @@ class PauseSubState extends MusicBeatSubstate
 				case "Exit to menu":
 					PlayState.deathCounter = 0;
 					PlayState.seenCutscene = false;
+					PlayState.leftSide = false;
 					CustomFadeTransition.nextCamera = transCamera;
 					if(PlayState.isStoryMode) {
 						MusicBeatState.switchState(new StoryMenuState());

@@ -9,7 +9,6 @@ import Controls;
 class ClientPrefs {
 	//TO DO: Redo ClientPrefs in a way that isn't too stupid
 	public static var downScroll:Bool = false;
-	public static var middleScroll:Bool = false;
 	public static var showFPS:Bool = true;
 	public static var flashingCar:Bool = true;
 	public static var globalAntialiasing:Bool = true;
@@ -30,6 +29,7 @@ class ClientPrefs {
 		S, DOWN,			//Note Down
 		W, UP,				//Note Up
 		D, RIGHT,			//Note Right
+		SPACE, NONE,            //Note Middle
 
 		A, LEFT,			//UI Left
 		S, DOWN,			//UI Down
@@ -48,6 +48,7 @@ class ClientPrefs {
 		[Control.NOTE_DOWN, 'Down'],
 		[Control.NOTE_UP, 'Up'],
 		[Control.NOTE_RIGHT, 'Right'],
+		[Control.NOTE_MIDDLE, 'Middle'],
 
 		[Control.UI_LEFT, 'Left '],		//Added a space for not conflicting on ControlsSubState
 		[Control.UI_DOWN, 'Down '],		//Added a space for not conflicting on ControlsSubState
@@ -63,7 +64,6 @@ class ClientPrefs {
 
 	public static function saveSettings() {
 		FlxG.save.data.downScroll = downScroll;
-		FlxG.save.data.middleScroll = middleScroll;
 		FlxG.save.data.showFPS = showFPS;
 		FlxG.save.data.flashingCar = flashingCar;
 		FlxG.save.data.globalAntialiasing = globalAntialiasing;
@@ -81,7 +81,7 @@ class ClientPrefs {
 		FlxG.save.flush();
 
 		var save:FlxSave = new FlxSave();
-		save.bind('controls', 'ninjamuffin99'); //Placing this in a separate save so that it can be manually deleted without removing your Score and stuff
+		save.bind('controls_v3', 'ninjamuffin99'); //Placing this in a separate save so that it can be manually deleted without removing your Score and stuff
 		save.data.customControls = lastControls;
 		save.flush();
 		FlxG.log.add("Settings saved!");
@@ -90,9 +90,6 @@ class ClientPrefs {
 	public static function loadPrefs() {
 		if(FlxG.save.data.downScroll != null) {
 			downScroll = FlxG.save.data.downScroll;
-		}
-		if(FlxG.save.data.middleScroll != null) {
-			middleScroll = FlxG.save.data.middleScroll;
 		}
 		if(FlxG.save.data.showFPS != null) {
 			showFPS = FlxG.save.data.showFPS;
@@ -142,7 +139,7 @@ class ClientPrefs {
 		}
 
 		var save:FlxSave = new FlxSave();
-		save.bind('controls', 'ninjamuffin99');
+		save.bind('controls_v3', 'ninjamuffin99');
 		if(save != null && save.data.customControls != null) {
 			reloadControls(save.data.customControls);
 		}

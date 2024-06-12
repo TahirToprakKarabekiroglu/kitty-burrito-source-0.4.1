@@ -55,6 +55,9 @@ class TitleState extends MusicBeatState
 	override public function create():Void
 	{
 		FlxG.fixedTimestep = false;
+
+		FlxG.mouse.visible = false;
+        FlxG.mouse.load(Paths.image("cursor"));
 		
 		#if (polymod && !html5)
 		if (sys.FileSystem.exists('mods/')) {
@@ -92,7 +95,7 @@ class TitleState extends MusicBeatState
 			return;
 		}
 
-		FlxG.save.bind('funkin', 'tahirk');
+		FlxG.save.bind('funkin', 'burrito');
 		ClientPrefs.loadPrefs();
 
 		Highscore.load();

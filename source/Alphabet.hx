@@ -417,6 +417,8 @@ class AlphaCharacter extends FlxSprite
 		updateHitbox();
 		switch (letter)
 		{
+			case ".":
+				y += 50 * textSize;
 			case "'":
 				y -= 20 * textSize;
 			case '-':

@@ -18,11 +18,11 @@ class Boyfriend extends Character
 
 	override function update(elapsed:Float)
 	{
-		if (!debugMode && animation.curAnim != null)
+		if (!debugMode && !PlayState.leftSide && animation.curAnim != null)
 		{
 			if (animation.curAnim.name.startsWith('sing'))
 			{
-				holdTimer += elapsed / (Paths.formatToSongPath(PlayState.SONG.song) == 'beginning-of-a-new-insanity' ? 3 : 1);
+				holdTimer += elapsed;
 			}
 			else
 				holdTimer = 0;
@@ -30,11 +30,6 @@ class Boyfriend extends Character
 			if (animation.curAnim.name.endsWith('miss') && animation.curAnim.finished && !debugMode)
 			{
 				playAnim('idle', true, false, 10);
-			}
-
-			if (animation.curAnim.name == 'firstDeath' && animation.curAnim.finished && startedDeath)
-			{
-				playAnim('deathLoop');
 			}
 		}
 

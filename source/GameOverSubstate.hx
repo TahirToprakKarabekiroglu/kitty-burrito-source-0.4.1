@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxSprite;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSubState;
@@ -13,6 +14,7 @@ import flixel.tweens.FlxTween;
 class GameOverSubstate extends MusicBeatSubstate
 {
 	var bf:Boyfriend;
+	var kitty:FlxSprite;
 	var camFollow:FlxPoint;
 	var camFollowPos:FlxObject;
 	var updateCamera:Bool = false;
@@ -21,6 +23,7 @@ class GameOverSubstate extends MusicBeatSubstate
 
 	var lePlayState:PlayState;
 
+	var heyPos:Bool;
 	public static var characterName:String = 'bf';
 	public static var deathSoundName:String = 'fnf_loss_sfx';
 	public static var loopSoundName:String = 'loop';
@@ -39,12 +42,22 @@ class GameOverSubstate extends MusicBeatSubstate
 		state.setOnLuas('inGameOver', true);
 		super();
 
+		FlxTween.tween(FlxG.camera, {zoom: 0.7}, 1.6, {ease: FlxEase.expoIn});
+
 		Conductor.songPosition = 0;
+
+		kitty = new FlxSprite().loadGraphic(Paths.image('kitty-face'));
+		kitty.scale.set(4, 4);
+		kitty.alpha = PlayState.leftSide ? 1 : 0;
+		add(kitty);
 
 		bf = new Boyfriend(x, y, characterName);
 		add(bf);
 
+		kitty.setPosition(bf.x - bf.width, bf.y);
+
 		camFollow = new FlxPoint(bf.getGraphicMidpoint().x, bf.getGraphicMidpoint().y);
+		camFollow.x -= 250;
 
 		FlxG.sound.play(Paths.sound(deathSoundName));
 		Conductor.changeBPM(100);
@@ -62,13 +75,14 @@ class GameOverSubstate extends MusicBeatSubstate
 		add(camFollowPos);
 	}
 
+	var canAccept:Bool;
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
 
 		lePlayState.callOnLuas('onUpdate', [elapsed]);
 		if(updateCamera) {
-			var lerpVal:Float = CoolUtil.boundTo(elapsed * 0.6, 0, 1);
+			var lerpVal:Float = CoolUtil.boundTo(elapsed * 1.2, 0, 1);
 			camFollowPos.setPosition(FlxMath.lerp(camFollowPos.x, camFollow.x, lerpVal), FlxMath.lerp(camFollowPos.y, camFollow.y, lerpVal));
 		}
 
@@ -77,23 +91,44 @@ class GameOverSubstate extends MusicBeatSubstate
 			endBullshit();
 		}
 
+		if (heyPos)
+			bf.playAnim('hey');
+
+		if (kitty.alpha == (PlayState.leftSide ? 1 : 0))
+		{
+			FlxTween.tween(kitty, {alpha: !PlayState.leftSide ? 1 : 0}, 3, {onUpdate: (twn) -> {
+				if (!canAccept && !isEnding)
+				{
+					bf.playAnim('firstDeath');
+				}
+			}, onComplete: (twn) -> {
+				if (!isEnding && !canAccept)
+				{
+					coolStartDeath();
+					if (PlayState.leftSide)
+					{
+						heyPos = true;
+						//bf.playAnim('hey');
+					}
+					else
+						bf.playAnim('deathLoop');
+					canAccept = true;
+				}
+			}});
+		}
+
 		if (bf.animation.curAnim.name == 'firstDeath')
 		{
-			if(bf.animation.curAnim.curFrame == 12)
-			{
-				FlxG.camera.follow(camFollowPos, LOCKON, 1);
-				updateCamera = true;
-			}
-
-			if (bf.animation.curAnim.finished)
-			{
-				coolStartDeath();
-				bf.startedDeath = true;
-			}
+			FlxG.camera.follow(camFollowPos, LOCKON, 1);
+			updateCamera = true;
 		}
 
 		if (controls.BACK)
 		{
+			isEnding = true;
+			canAccept = true;
+
+			FlxTween.cancelTweensOf(kitty);
 			FlxG.sound.music.stop();
 			PlayState.deathCounter = 0;
 			PlayState.seenCutscene = false;
@@ -102,7 +137,7 @@ class GameOverSubstate extends MusicBeatSubstate
 				MusicBeatState.switchState(new StoryMenuState());
 			else
 				MusicBeatState.switchState(new FreeplayState());
-			if (!bf.animation.curAnim.finished)
+			if (bf.animation.curAnim != null && !bf.animation.curAnim.finished)
 				coolStartDeath();
 			lePlayState.callOnLuas('onGameOverConfirm', [false]);
 		}
@@ -132,13 +167,29 @@ class GameOverSubstate extends MusicBeatSubstate
 	{
 		if (!isEnding)
 		{
+			heyPos = false;
 			isEnding = true;
-			bf.playAnim('deathConfirm', true);
+			if (PlayState.leftSide)
+				bf.playAnim('deathLoop', true);
+			else
+				bf.playAnim('deathConfirm', true);
 			//FlxG.sound.music.stop();
 			FlxG.sound.music.fadeOut(2.7);
 			FlxG.sound.play(Paths.sound(endSoundName));
-			new FlxTimer().start(0.7, function(tmr:FlxTimer)
+			canAccept = true;
+			if (PlayState.leftSide)
 			{
+				FlxTween.cancelTweensOf(kitty);
+				FlxTween.tween(kitty, {alpha: PlayState.leftSide ? 1 : 0}, 2);
+			}
+			new FlxTimer().start(PlayState.leftSide ? 2.7 : 0.7, function(tmr:FlxTimer)
+			{
+				if (!PlayState.leftSide)
+				{
+					FlxTween.cancelTweensOf(kitty);
+					FlxTween.tween(kitty, {alpha: PlayState.leftSide ? 1 : 0}, 2);
+				}
+
 				FlxG.camera.fade(FlxColor.BLACK, 2, false, function()
 				{
 					MusicBeatState.resetState();

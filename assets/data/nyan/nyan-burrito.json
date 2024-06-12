@@ -2,8 +2,8 @@
 	"song": {
 		"speed": 2.2,
 		"stage": "stage",
-		"player1": "bf",
-		"player2": "burito",
+		"player1": "bf_nya",
+		"player2": "burito_nya",
 		"events": [],
 		"notes": [
 			{
