@@ -982,9 +982,6 @@ class PlayState extends MusicBeatState
 		}
 		super.create();
 
-		var song = Paths.formatToSongPath(SONG.song) == "silly-but-sad-cat-song";
-		if (song)
-			healthHurtValue = 0.004;
 		if (Paths.formatToSongPath(SONG.song) == "please-don't")
 			FlxTween.tween(dontText, {y: scoreTxt.y - scoreTxt.height - 10}, 1, {ease: FlxEase.expoInOut, onComplete: function(twn)
 			{
@@ -1018,6 +1015,9 @@ class PlayState extends MusicBeatState
 			infuseText.alpha = 0;
 			add(infuseText);
 		}
+
+		if (Paths.formatToSongPath(SONG.song) == "silly-but-sad-cat-song")
+			camZooming = true;
 	}
 	var healthString = "0.00000001";
 	var bootUp:FlxVideoSprite;
@@ -1803,6 +1803,8 @@ class PlayState extends MusicBeatState
 				@:privateAccess scoreTxt.text = 'NOT HOLDING INSANITY (HOLD ${FlxKey.toStringMap.get(cast controls._note_middle.inputs[0].inputID)})';
 			}
 		}
+		else if (Paths.formatToSongPath(SONG.song) == "silly-but-sad-cat-song")
+			scoreTxt.text = "CATS!!";
 		else
 			scoreTxt.text = 'Burritos: $songScore/$burritos($sBurritos) | Misses: ' + songMisses;
 
@@ -1916,6 +1918,8 @@ class PlayState extends MusicBeatState
 					var secondsRemaining:String = '' + secondsTotal % 60;
 					if(secondsRemaining.length < 2) secondsRemaining = '0' + secondsRemaining; //Dunno how to make it display a zero first in Haxe lol
 					timeTxt.text = minutesRemaining + ':' + secondsRemaining;
+					if (Paths.formatToSongPath(SONG.song) == "silly-but-sad-cat-song")
+						timeTxt.text = "CATS!!";
 				}
 
 				lifeTxt.x = timeTxt.x + timeTxt.width / 4 + 35;
@@ -1934,6 +1938,8 @@ class PlayState extends MusicBeatState
 					healthString = "00.01";
 
 				lifeTxt.text = "%" + healthString;
+				if (Paths.formatToSongPath(SONG.song) == "silly-but-sad-cat-song")
+					lifeTxt.text = "CATS!!";
 			}
 
 			// Conductor.lastSongPos = FlxG.sound.music.time;
@@ -1980,7 +1986,7 @@ class PlayState extends MusicBeatState
 				if (Paths.formatToSongPath(SONG.song) != "silly-but-sad-cat-song")
 					healthHurtValue += elapsed / (Paths.formatToSongPath(SONG.song) != "hold-your-insanity" ? (6000 * (Paths.formatToSongPath(SONG.song) == "we're-landing-at-last" ? 1.25 : 1)) : 15000);
 				else
-					healthHurtValue += elapsed / 100000;
+					healthHurtValue += elapsed / 75000;
 			}
 		}
 
@@ -2274,11 +2280,6 @@ class PlayState extends MusicBeatState
 
 				var doKill:Bool = daNote.y < -daNote.height;
 				if(ClientPrefs.downScroll) doKill = daNote.y > FlxG.height;
-				var song = Paths.formatToSongPath(SONG.song) == "silly-but-sad-cat-song";
-				if (song)
-				{
-					doKill = doKill && (camHUD.angle == 0 || camHUD.angle == 180);
-				}
 				if (curStage == 'resonance' && doKill)
 				{
 					doKill = daNote.animation.curAnim != null && !daNote.animation.curAnim.name.endsWith('end');
@@ -3064,7 +3065,7 @@ class PlayState extends MusicBeatState
 
 	private function keyShit():Void
 	{
-		var song:Bool = Paths.formatToSongPath(SONG.song) == "silly-but-sad-cat-song" && camHUD.angle == 180;
+		var song:Bool = false;
 		if (currentEffect == "song")
 			song = true;
 
@@ -3528,7 +3529,7 @@ class PlayState extends MusicBeatState
 
 		lastStepHit = curStep;
 
-		var song = Paths.formatToSongPath(SONG.song) == "silly-but-sad-cat-song";
+		var song = false;
 		if (song)
 		{
 			if (curStep % 32 == 0)
@@ -3638,8 +3639,8 @@ class PlayState extends MusicBeatState
 
 		if (camZooming && FlxG.camera.zoom < 1.35 && ClientPrefs.camZooms && curBeat % 4 == 0)
 		{
-			FlxG.camera.zoom += 0.015;
-			camHUD.zoom += 0.03;
+			FlxG.camera.zoom += FlxG.random.float(0.1, 0.15);
+			camHUD.zoom += FlxG.random.float(0.075, 0.2);
 		}
 
 		var opponent:Character = dad;
