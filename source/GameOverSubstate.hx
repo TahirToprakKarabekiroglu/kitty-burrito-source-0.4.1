@@ -39,7 +39,6 @@ class GameOverSubstate extends MusicBeatSubstate
 	public function new(x:Float, y:Float, camX:Float, camY:Float, state:PlayState)
 	{
 		lePlayState = state;
-		state.setOnLuas('inGameOver', true);
 		super();
 
 		FlxTween.tween(FlxG.camera, {zoom: 0.7}, 1.6, {ease: FlxEase.expoIn});
@@ -60,7 +59,7 @@ class GameOverSubstate extends MusicBeatSubstate
 		camFollow.x -= 250;
 
 		FlxG.sound.play(Paths.sound(deathSoundName));
-		Conductor.changeBPM(100);
+		Conductor.changeBPM(180);
 		// FlxG.camera.followLerp = 1;
 		// FlxG.camera.focusOn(FlxPoint.get(FlxG.width / 2, FlxG.height / 2));
 		FlxG.camera.scroll.set();
@@ -79,8 +78,6 @@ class GameOverSubstate extends MusicBeatSubstate
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
-
-		lePlayState.callOnLuas('onUpdate', [elapsed]);
 		if(updateCamera) {
 			var lerpVal:Float = CoolUtil.boundTo(elapsed * 1.2, 0, 1);
 			camFollowPos.setPosition(FlxMath.lerp(camFollowPos.x, camFollow.x, lerpVal), FlxMath.lerp(camFollowPos.y, camFollow.y, lerpVal));
@@ -134,19 +131,17 @@ class GameOverSubstate extends MusicBeatSubstate
 			PlayState.seenCutscene = false;
 
 			if (PlayState.isStoryMode)
-				MusicBeatState.switchState(new StoryMenuState());
+				MusicBeatState.switchState(new MainMenuState());
 			else
 				MusicBeatState.switchState(new FreeplayState());
 			if (bf.animation.curAnim != null && !bf.animation.curAnim.finished)
 				coolStartDeath();
-			lePlayState.callOnLuas('onGameOverConfirm', [false]);
 		}
 
 		if (FlxG.sound.music.playing)
 		{
 			Conductor.songPosition = FlxG.sound.music.time;
 		}
-		lePlayState.callOnLuas('onUpdatePost', [elapsed]);
 	}
 
 	override function beatHit()
@@ -195,7 +190,6 @@ class GameOverSubstate extends MusicBeatSubstate
 					MusicBeatState.resetState();
 				});
 			});
-			lePlayState.callOnLuas('onGameOverConfirm', [true]);
 		}
 	}
 }

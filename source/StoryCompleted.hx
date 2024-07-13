@@ -19,14 +19,14 @@ class StoryCompleted extends MusicBeatSubstate
         add(bg);
 
         var newt:FlxText = new FlxText();
-        newt.setFormat(Paths.font('vcr.ttf'), 64, CENTER);
+        newt.setFormat(Paths.font('vcr.ttf'), 96, CENTER);
         newt.text = "You completed story mode!\nWhat's NEW?";
         newt.screenCenter();
         newt.y -= FlxG.height / 4;
         add(newt);
 
         unlockText = new FlxText();
-        unlockText.setFormat(Paths.font('vcr.ttf'), 36, LEFT);
+        unlockText.setFormat(Paths.font('vcr.ttf'), 54, LEFT);
         var text = "- You unlocked (extra( songs in freeplay!\n- You unlocked *Burrito Kitty* as a playable character!\n- You can now press )8) to play old versions of songs!";
         unlockText.applyMarkup(text, [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.fromRGB(125, 73, 43)), '*'),
         new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.fromRGB(60, 255, 34)), '('), new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.YELLOW), ')')]);
@@ -34,7 +34,7 @@ class StoryCompleted extends MusicBeatSubstate
         add(unlockText);
 
         var newText = new FlxText();
-        newText.setFormat(Paths.font('vcr.ttf'), 32, CENTER);
+        newText.setFormat(Paths.font('vcr.ttf'), 48, CENTER);
         var text = "Finish )Insanity), )Warmth Without Insanity) and\n)Insanity on Earth) as ?BurritoFriend? to unlock )Original) songs.";
         newText.applyMarkup(text, [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.YELLOW), ')'),
             new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.CYAN), '?')]);
@@ -60,7 +60,7 @@ class StoryCompleted extends MusicBeatSubstate
             close();
 
             FlxG.sound.playMusic(Paths.music('loop'));
-            MusicBeatState.switchState(new StoryMenuState());
+            MusicBeatState.switchState(new MainMenuState());
         }
     }
 }

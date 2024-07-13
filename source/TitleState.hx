@@ -1,5 +1,7 @@
 package;
 
+import flixel.effects.FlxFlicker;
+import openfl.display.BitmapData;
 #if desktop
 import Discord.DiscordClient;
 import sys.thread.Thread;
@@ -48,16 +50,18 @@ class TitleState extends MusicBeatState
 
 	var wackyImage:FlxSprite;
 
-	var easterEggEnabled:Bool = true; //Disable this to hide the easter egg
+	var easterEggEnabled:Bool = false; //Disable this to hide the easter egg
 	var easterEggKeyCombination:Array<FlxKey> = [FlxKey.B, FlxKey.B]; //bb stands for bbpanzu cuz he wanted this lmao
 	var lastKeysPressed:Array<FlxKey> = [];
+
+	var alphaSine:Float = 0;
 
 	override public function create():Void
 	{
 		FlxG.fixedTimestep = false;
 
 		FlxG.mouse.visible = false;
-        FlxG.mouse.load(Paths.image("cursor"));
+        FlxG.mouse.load(BitmapData.fromFile("assets/images/cursor.png"));
 		
 		#if (polymod && !html5)
 		if (sys.FileSystem.exists('mods/')) {
@@ -75,6 +79,7 @@ class TitleState extends MusicBeatState
 		//Gonna finish this later, probably
 		#end
 
+		
 		FlxG.game.focusLostFramerate = 60;
 		FlxG.sound.muteKeys = muteKeys;
 		FlxG.sound.volumeDownKeys = volumeDownKeys;
@@ -89,16 +94,16 @@ class TitleState extends MusicBeatState
 		swagShader = new ColorSwap();
 		super.create();
 
+		FlxG.save.bind('burrito', 'kitty');
+		ClientPrefs.loadPrefs();
+
+		Highscore.load();
+
 		if (ClientPrefs.flashingCar && !FlxG.save.data.sawCat)
 		{
 			FlxG.switchState(new FlashingState());
 			return;
 		}
-
-		FlxG.save.bind('funkin', 'burrito');
-		ClientPrefs.loadPrefs();
-
-		Highscore.load();
 
 		if (FlxG.save.data.weekCompleted != null)
 		{
@@ -126,34 +131,13 @@ class TitleState extends MusicBeatState
 
 	var logoBl:FlxSprite;
 	var danceLeft:Bool = false;
-	var titleText:FlxSprite;
+	var titleText:FlxText;
 	var swagShader:ColorSwap = null;
 
 	function startIntro()
 	{
 		if (!initialized)
 		{
-			/*var diamond:FlxGraphic = FlxGraphic.fromClass(GraphicTransTileDiamond);
-			diamond.persist = true;
-			diamond.destroyOnNoUse = false;
-
-			FlxTransitionableState.defaultTransIn = new TransitionData(FADE, FlxColor.BLACK, 1, new FlxPoint(0, -1), {asset: diamond, width: 32, height: 32},
-				new FlxRect(-300, -300, FlxG.width * 1.8, FlxG.height * 1.8));
-			FlxTransitionableState.defaultTransOut = new TransitionData(FADE, FlxColor.BLACK, 0.7, new FlxPoint(0, 1),
-				{asset: diamond, width: 32, height: 32}, new FlxRect(-300, -300, FlxG.width * 1.8, FlxG.height * 1.8));
-				
-			transIn = FlxTransitionableState.defaultTransIn;
-			transOut = FlxTransitionableState.defaultTransOut;*/
-
-			// HAD TO MODIFY SOME BACKEND SHIT
-			// IF THIS PR IS HERE IF ITS ACCEPTED UR GOOD TO GO
-			// https://github.com/HaxeFlixel/flixel-addons/pull/348
-
-			// var music:FlxSound = new FlxSound();
-			// music.loadStream(Paths.music('freakyMenu'));
-			// FlxG.sound.list.add(music);
-			// music.play();
-
 			if(FlxG.sound.music == null) {
 				FlxG.sound.playMusic(Paths.music('loop'), 0);
 
@@ -161,38 +145,21 @@ class TitleState extends MusicBeatState
 			}
 		}
 
-		Conductor.changeBPM(180.987);
+		Conductor.changeBPM(180);
 		persistentUpdate = true;
 
-		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
-		// bg.antialiasing = ClientPrefs.globalAntialiasing;
-		// bg.setGraphicSize(Std.int(bg.width * 0.6));
-		// bg.updateHitbox();
-		add(bg);
-
-		logoBl = new FlxSprite(-150, -100);
-		logoBl.frames = Paths.getSparrowAtlas('logoBumpin');
-		logoBl.antialiasing = ClientPrefs.globalAntialiasing;
-		logoBl.animation.addByPrefix('bump', 'logo bumpin', 24);
-		logoBl.animation.play('bump');
+		logoBl = new FlxSprite().loadGraphic(Paths.image("perfectcut"));
 		logoBl.screenCenter();
-		logoBl.y -= 50;
-		logoBl.updateHitbox();
-		// logoBl.screenCenter();
-		// logoBl.color = FlxColor.BLACK;
 		add(logoBl);
 
 		swagShader = new ColorSwap();
 		//logoBl.shader = swagShader.shader;
 
-		titleText = new FlxSprite(100, FlxG.height * 0.8);
-		titleText.frames = Paths.getSparrowAtlas('titleEnter');
-		titleText.animation.addByPrefix('idle', "Press Enter to Begin", 24);
-		titleText.animation.addByPrefix('press', "ENTER PRESSED", 24);
-		titleText.antialiasing = ClientPrefs.globalAntialiasing;
-		titleText.animation.play('idle');
-		titleText.updateHitbox();
-		// titleText.screenCenter(X);
+		titleText = new FlxText(0, FlxG.height * 0.8);
+		titleText.setFormat(Paths.font("vcr.ttf"), 120, FlxColor.WHITE, CENTER, OUTLINE, FlxColor.BLACK);
+		titleText.borderSize = 4;
+		titleText.text = "Press ENTER to Begin";
+		titleText.screenCenter(X);
 		add(titleText);
 
 		var logo:FlxSprite = new FlxSprite().loadGraphic(Paths.image('logo'));
@@ -288,13 +255,17 @@ class TitleState extends MusicBeatState
 			#end
 		}
 
-		// EASTER EGG
+		alphaSine += FlxG.elapsed * 90;
+		if (!transitioning && titleText != null)
+		{
+			titleText.alpha = 1 - Math.sin((Math.PI * alphaSine) / 90);
+		}
 
 		if (!transitioning && skippedIntro)
 		{
 			if(pressedEnter)
 			{
-				if(titleText != null) titleText.animation.play('press');
+				FlxFlicker.flicker(titleText, 2, 0.06, false, false);
 
 				FlxG.camera.flash(FlxColor.WHITE, 1);
 				FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
@@ -308,49 +279,6 @@ class TitleState extends MusicBeatState
 					closedState = true;
 				});
 				// FlxG.sound.play(Paths.music('titleShoot'), 0.7);
-			}
-			else if(easterEggEnabled)
-			{
-				var finalKey:FlxKey = FlxG.keys.firstJustPressed();
-				if(finalKey != FlxKey.NONE) {
-					lastKeysPressed.push(finalKey); //Convert int to FlxKey
-					if(lastKeysPressed.length > easterEggKeyCombination.length)
-					{
-						lastKeysPressed.shift();
-					}
-					
-					if(lastKeysPressed.length == easterEggKeyCombination.length)
-					{
-						var isDifferent:Bool = false;
-						for (i in 0...lastKeysPressed.length) {
-							if(lastKeysPressed[i] != easterEggKeyCombination[i]) {
-								isDifferent = true;
-								break;
-							}
-						}
-
-						if(!isDifferent) {
-							trace('Easter egg triggered!');
-							FlxG.save.data.psykaEasterEgg = !FlxG.save.data.psykaEasterEgg;
-							FlxG.sound.play(Paths.sound('secretSound'));
-
-							var black:FlxSprite = new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
-							black.alpha = 0;
-							add(black);
-
-							FlxTween.tween(black, {alpha: 1}, 1, {onComplete:
-								function(twn:FlxTween) {
-									FlxTransitionableState.skipNextTransIn = true;
-									FlxTransitionableState.skipNextTransOut = true;
-									MusicBeatState.switchState(new TitleState());
-								}
-							});
-							lastKeysPressed = [];
-							closedState = true;
-							transitioning = true;
-						}
-					}
-				}
 			}
 		}
 
@@ -372,7 +300,7 @@ class TitleState extends MusicBeatState
 	{
 		for (i in 0...textArray.length)
 		{
-			var money:Alphabet = new Alphabet(0, 0, textArray[i], true, false);
+			var money:Alphabet = new Alphabet(0, 0, textArray[i], true);
 			money.screenCenter(X);
 			money.y += (i * 60) + 200 + offset;
 			credGroup.add(money);
@@ -383,7 +311,7 @@ class TitleState extends MusicBeatState
 	function addMoreText(text:String, ?offset:Float = 0)
 	{
 		if(textGroup != null) {
-			var coolText:Alphabet = new Alphabet(0, 0, text, true, false);
+			var coolText:Alphabet = new Alphabet(0, 0, text, true);
 			coolText.screenCenter(X);
 			coolText.y += (textGroup.length * 60) + 200 + offset;
 			credGroup.add(coolText);
@@ -404,9 +332,6 @@ class TitleState extends MusicBeatState
 	override function beatHit()
 	{
 		super.beatHit();
-
-		if(logoBl != null) 
-			logoBl.animation.play('bump');
 
 		if(!closedState) {
 			switch (curBeat)
@@ -452,7 +377,7 @@ class TitleState extends MusicBeatState
 		{
 			remove(logoSpr);
 
-			FlxG.camera.flash(FlxColor.WHITE, 4);
+			FlxG.camera.flash(FlxColor.WHITE, 1.5);
 			remove(credGroup);
 			skippedIntro = true;
 		}

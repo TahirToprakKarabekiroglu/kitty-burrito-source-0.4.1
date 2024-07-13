@@ -6,7 +6,6 @@ import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.math.FlxMath;
 import flixel.util.FlxColor;
 import flash.display.BitmapData;
-import editors.ChartingState;
 
 using StringTools;
 
@@ -38,7 +37,7 @@ class Note extends FlxSprite
 
 	public var colorSwap:ColorSwap;
 	public var inEditor:Bool = false;
-	private var earlyHitMult:Float = 0.5;
+	public var earlyHitMult:Float = 0.5;
 
 	public static var swagWidth:Float = 160 * 0.7;
 	public static var PURP_NOTE:Int = 0;
@@ -157,13 +156,13 @@ class Note extends FlxSprite
 				switch (noteData % 4)
 				{
 					case 0:
-						animToPlay = 'purple';
-					case 1:
-						animToPlay = 'blue';
-					case 2:
-						animToPlay = 'green';
-					case 3:
 						animToPlay = 'red';
+					case 1:
+						animToPlay = 'green';
+					case 2:
+						animToPlay = 'blue';
+					case 3:
+						animToPlay = 'yellow';
 				}
 				animation.play(animToPlay + 'Scroll');
 			}
@@ -183,13 +182,13 @@ class Note extends FlxSprite
 			switch (noteData)
 			{
 				case 0:
-					animation.play('purpleholdend');
-				case 1:
-					animation.play('blueholdend');
-				case 2:
-					animation.play('greenholdend');
-				case 3:
 					animation.play('redholdend');
+				case 1:
+					animation.play('greenholdend');
+				case 2:
+					animation.play('blueholdend');
+				case 3:
+					animation.play('yellowholdend');
 			}
 
 			updateHitbox();
@@ -203,13 +202,13 @@ class Note extends FlxSprite
 				switch (prevNote.noteData)
 				{
 					case 0:
-						prevNote.animation.play('purplehold');
-					case 1:
-						prevNote.animation.play('bluehold');
-					case 2:
-						prevNote.animation.play('greenhold');
-					case 3:
 						prevNote.animation.play('redhold');
+					case 1:
+						prevNote.animation.play('greenhold');
+					case 2:
+						prevNote.animation.play('bluehold');
+					case 3:
+						prevNote.animation.play('yellowhold');
 				}
 
 				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.05 * PlayState.SONG.speed;
@@ -283,30 +282,25 @@ class Note extends FlxSprite
 
 		if(animName != null)
 			animation.play(animName, true);
-
-		if(inEditor) {
-			setGraphicSize(ChartingState.GRID_SIZE, ChartingState.GRID_SIZE);
-			updateHitbox();
-		}
 	}
 
 	function loadNoteAnims() {
 		animation.addByPrefix('greenScroll', 'green0');
 		animation.addByPrefix('redScroll', 'red0');
 		animation.addByPrefix('blueScroll', 'blue0');
-		animation.addByPrefix('purpleScroll', 'purple0');
+		animation.addByPrefix('yellowScroll', 'yellow0');
 
 		if (isSustainNote)
 		{
-			animation.addByPrefix('purpleholdend', 'pruple end hold');
-			animation.addByPrefix('greenholdend', 'green hold end');
-			animation.addByPrefix('redholdend', 'red hold end');
-			animation.addByPrefix('blueholdend', 'blue hold end');
+			animation.addByPrefix('yellowholdend', 'yellow hold end0');
+			animation.addByPrefix('greenholdend', 'green hold end0');
+			animation.addByPrefix('redholdend', 'red hold end0');
+			animation.addByPrefix('blueholdend', 'blue hold end0');
 
-			animation.addByPrefix('purplehold', 'purple hold piece');
-			animation.addByPrefix('greenhold', 'green hold piece');
-			animation.addByPrefix('redhold', 'red hold piece');
-			animation.addByPrefix('bluehold', 'blue hold piece');
+			animation.addByPrefix('yellowhold', 'yellow hold piece0');
+			animation.addByPrefix('greenhold', 'green hold piece0');
+			animation.addByPrefix('redhold', 'red hold piece0');
+			animation.addByPrefix('bluehold', 'blue hold piece0');
 		}
 
 		setGraphicSize(Std.int(width * 0.7));
@@ -321,12 +315,12 @@ class Note extends FlxSprite
 
 	function loadPixelNoteAnims() {
 		if(isSustainNote) {
-			animation.add('purpleholdend', [PURP_NOTE + 4]);
+			animation.add('yellowholdend', [PURP_NOTE + 4]);
 			animation.add('greenholdend', [GREEN_NOTE + 4]);
 			animation.add('redholdend', [RED_NOTE + 4]);
 			animation.add('blueholdend', [BLUE_NOTE + 4]);
 
-			animation.add('purplehold', [PURP_NOTE]);
+			animation.add('yellowhold', [PURP_NOTE]);
 			animation.add('greenhold', [GREEN_NOTE]);
 			animation.add('redhold', [RED_NOTE]);
 			animation.add('bluehold', [BLUE_NOTE]);
@@ -334,7 +328,7 @@ class Note extends FlxSprite
 			animation.add('greenScroll', [GREEN_NOTE + 4]);
 			animation.add('redScroll', [RED_NOTE + 4]);
 			animation.add('blueScroll', [BLUE_NOTE + 4]);
-			animation.add('purpleScroll', [PURP_NOTE + 4]);
+			animation.add('yellowScroll', [PURP_NOTE + 4]);
 		}
 	}
 
@@ -342,12 +336,12 @@ class Note extends FlxSprite
 	{
 		super.update(elapsed);
 
-		if (PlayState.SONG != null && Paths.formatToSongPath(PlayState.SONG.song) == "warmth-without-insanity")
+		if (PlayState.SONG != null && Paths.formatToSongPath(PlayState.SONG.song) == "warmth-without-insanity" && !isSustainNote)
 		{
 			earlyHitMult = switch PlayState.instance.warmnessLevel {
 				case "Warm": 1;
-				case "Moderate": 0.75;
-				case "Cold": 0.5;
+				case "Moderate": 0.7;
+				case "Cold": 0.4;
 				case _: 0;
 			}
 		}

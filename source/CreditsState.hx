@@ -25,7 +25,7 @@ class CreditsState extends MusicBeatState
 
 	private static var creditsStuff:Array<Dynamic> = [ //Name - Icon name - Description - Link - BG Color
 		['Burrito Kitty'],
-		['Tahir Toprak K.', 'toprak', 'Made the mod', 'https://twitter.com/tahirkarabekir', FlxColor.fromRGB(182, 84, 82)],
+		['Tahir Toprak Karabekiroglu', 'toprak', 'Made the mod', 'https://twitter.com/tahirkarabekir', FlxColor.fromRGB(182, 84, 82)],
 		[''],
 		['Icon By'],
 		['Ralty', '', '', 'https://twitter.com/raltyro', FlxColor.WHITE],
@@ -78,7 +78,7 @@ class CreditsState extends MusicBeatState
 		for (i in 0...creditsStuff.length)
 		{
 			var isSelectable:Bool = !unselectableCheck(i);
-			var optionText:Alphabet = new Alphabet(0, 70 * i, creditsStuff[i][0], !isSelectable, false);
+			var optionText:Alphabet = new Alphabet(0, 70 * i, creditsStuff[i][0], !isSelectable);
 			optionText.isMenuItem = true;
 			optionText.screenCenter(X);
 			if(isSelectable) {
@@ -94,7 +94,8 @@ class CreditsState extends MusicBeatState
 				if (creditsStuff[i][1] != '')
 				{
 					icon = new AttachedSprite('credits/' + creditsStuff[i][1]);
-					icon.xAdd = optionText.width + 10;
+					icon.xAdd = optionText.width;
+					icon.yAdd = -40;
 					icon.sprTracker = optionText;
 
 					// using a FlxGroup is too much fuss
@@ -110,7 +111,7 @@ class CreditsState extends MusicBeatState
 		}
 
 		descText = new FlxText(50, 600, 1180, "", 32);
-		descText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		descText.setFormat(Paths.font("vcr.ttf"), 48, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		descText.scrollFactor.set();
 		descText.borderSize = 2.4;
 		add(descText);
@@ -156,7 +157,7 @@ class CreditsState extends MusicBeatState
 
 	function changeSelection(change:Int = 0)
 	{
-		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+		FlxG.sound.play(Paths.sound('scrollMenu'), 1);
 		do {
 			curSelected += change;
 			if (curSelected < 0)

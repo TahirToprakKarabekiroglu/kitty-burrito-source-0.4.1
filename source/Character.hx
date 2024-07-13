@@ -48,6 +48,7 @@ class Character extends FlxSprite
 
 	public var isPlayer:Bool = false;
 	public var curCharacter:String = DEFAULT_CHARACTER;
+	public var onPlay:(AnimName:String, Force:Bool, Reversed:Bool, Frame:Int) -> Void;
 
 	public var colorTween:FlxTween;
 	public var holdTimer:Float = 0;
@@ -124,7 +125,7 @@ class Character extends FlxSprite
 
 				if(json.scale != 1) {
 					jsonScale = json.scale;
-					setGraphicSize(Std.int(width * jsonScale));
+					scale.set(json.scale, json.scale);
 					updateHitbox();
 				}
 
@@ -287,6 +288,9 @@ class Character extends FlxSprite
 
 		if (specialAnim || !animation.exists(AnimName))
 			return;
+
+		if (onPlay != null)
+			onPlay(AnimName, Force, Reversed, Frame);
 		
 		specialAnim = false;
 		animation.play(AnimName, Force, Reversed, Frame);
@@ -329,5 +333,28 @@ class Character extends FlxSprite
 	public function quickAnimAdd(name:String, anim:String)
 	{
 		animation.addByPrefix(name, anim, 24, false);
+	}
+
+	public function cloneCharacter():Character
+	{
+		var clone:Character = new Character(this.x, this.y, this.curCharacter);
+
+		/*clone.offset.x = this.offset.x;
+		clone.scale.x = this.scale.x;
+		clone.scale.y = this.scale.y;
+		clone.updateHitbox();
+		clone.offset.y = this.offset.y;
+		clone.animOffsets = animOffsets;
+		clone.animationsArray = animationsArray;
+		clone.cameraPosition = cameraPosition;
+		clone.curCharacter = curCharacter;
+		clone.healthIcon = healthIcon;
+		clone.idleSuffix = idleSuffix;
+		clone.imageFile = imageFile;
+		clone.jsonScale = jsonScale;
+		clone.positionArray = positionArray;
+		clone.singDuration = singDuration;*/
+
+		return clone;
 	}
 }

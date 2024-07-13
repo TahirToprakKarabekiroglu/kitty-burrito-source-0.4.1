@@ -37,7 +37,7 @@ class CoolKittenSubstate extends FlxGroup
             kittyNotes.add(note);
 
             var text:FlxText = new FlxText();
-            text.setFormat(Paths.font("vcr.ttf"), 36, FlxColor.WHITE, CENTER, OUTLINE, FlxColor.BLACK);
+            text.setFormat(Paths.font("vcr.ttf"), 54, FlxColor.WHITE, CENTER, OUTLINE, FlxColor.BLACK);
             text.borderSize = 2;
             text.text = '^';
             text.x = note.x + note.width / 2 - 10;
@@ -45,22 +45,30 @@ class CoolKittenSubstate extends FlxGroup
             add(text);
 
             var supposedY:Float = (FlxG.height - note.height) / 2;
+            supposedY += 180;
             FlxTween.tween(note, {y: supposedY}, 2.4, {onUpdate: (twn) -> {
                 text.y = note.y + note.height + 5;
             }, ease: FlxEase.expoInOut});
         }
 
         var text:FlxText = new FlxText();
-        text.setFormat(Paths.font("vcr.ttf"), 36, FlxColor.WHITE, CENTER, OUTLINE, FlxColor.BLACK);
+        text.setFormat(Paths.font("vcr.ttf"), 54, FlxColor.WHITE, CENTER, OUTLINE, FlxColor.BLACK);
         text.borderSize = 2;
         text.text = "KITTY NOTES: \nWhen hit, the strum you hit the note will disappear.\nYou cannot hit notes that have the same direction\nas the strum until the strum is fully visible!\n\n(Strums will reappear over time)";
-        text.text += "\nThey are quite hard to hit, but deadly.";
+        text.text += "\nThey are quite hard to hit, but deadly.\nThey also deal insane damage, so do not hit them!";
         text.screenCenter();
-        text.y -= 210;
+        text.y -= 120;
         add(text);
 
         var text:FlxText = new FlxText();
-        text.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, RIGHT);
+        text.setFormat(Paths.font("vcr.ttf"), 36, FlxColor.WHITE, RIGHT);
+        text.text = "Hit BACKSPACE to never show this screen again";
+        text.y = FlxG.height - text.height - 32;
+        text.x = FlxG.width - text.width - 10;
+        add(text);
+
+        var text:FlxText = new FlxText();
+        text.setFormat(Paths.font("vcr.ttf"), 36, FlxColor.WHITE, RIGHT);
         text.text = "Hit ENTER twice to exit";
         text.y = FlxG.height - text.height - 6;
         text.x = FlxG.width - text.width - 10;
@@ -73,6 +81,15 @@ class CoolKittenSubstate extends FlxGroup
     override function update(elapsed:Float) 
     {
         super.update(elapsed);   
+
+        if (FlxG.keys.justPressed.BACKSPACE)
+        {
+            FlxG.save.data.explainedPussy = true;
+            FlxG.save.flush();
+
+            kill();
+            destroy();
+        }
         
         if (FlxG.keys.justPressed.ENTER)
             hitEnter++;

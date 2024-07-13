@@ -9,10 +9,13 @@ import flixel.util.FlxSignal;
 // import props.Player;
 class PlayerSettings
 {
+	public static var enabledDown:Bool = true;
+
 	static public var numPlayers(default, null) = 0;
 	static public var numAvatars(default, null) = 0;
 	static public var player1(default, null):PlayerSettings;
 	static public var player2(default, null):PlayerSettings;
+
 
 	#if (haxe >= "4.0.0")
 	static public final onAvatarAdd = new FlxTypedSignal<PlayerSettings->Void>();

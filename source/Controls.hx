@@ -182,7 +182,7 @@ class Controls extends FlxActionSet
 	public var UI_DOWN(get, never):Bool;
 
 	inline function get_UI_DOWN()
-		return _ui_down.check();
+		return _ui_down.check() && PlayerSettings.enabledDown;
 
 	public var UI_UP_P(get, never):Bool;
 
@@ -222,7 +222,7 @@ class Controls extends FlxActionSet
 	public var UI_DOWN_R(get, never):Bool;
 
 	inline function get_UI_DOWN_R()
-		return _ui_downR.check();
+		return _ui_downR.check() && PlayerSettings.enabledDown;
 
 	public var NOTE_UP(get, never):Bool;
 
@@ -267,7 +267,7 @@ class Controls extends FlxActionSet
 	public var NOTE_DOWN_P(get, never):Bool;
 
 	inline function get_NOTE_DOWN_P()
-		return _note_downP.check();
+		return _note_downP.check() && PlayerSettings.enabledDown;
 
 	public var NOTE_MIDDLE_P(get, never):Bool;
 

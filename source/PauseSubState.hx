@@ -57,14 +57,14 @@ class PauseSubState extends MusicBeatSubstate
 		var levelInfo:FlxText = new FlxText(20, 15, 0, "", 32);
 		levelInfo.text += PlayState.SONG.song;
 		levelInfo.scrollFactor.set();
-		levelInfo.setFormat(Paths.font("vcr.ttf"), 32);
+		levelInfo.setFormat(Paths.font("vcr.ttf"), 48);
 		levelInfo.updateHitbox();
 		add(levelInfo);
 
 		var levelDifficulty:FlxText = new FlxText(20, 15 + 32, 0, "", 32);
 		levelDifficulty.text += CoolUtil.difficultyString();
 		levelDifficulty.scrollFactor.set();
-		levelDifficulty.setFormat(Paths.font('vcr.ttf'), 32);
+		levelDifficulty.setFormat(Paths.font('vcr.ttf'), 48);
 		levelDifficulty.updateHitbox();
 		add(levelDifficulty);
 		if (PlayState.SONG.song == "nyan")
@@ -73,7 +73,7 @@ class PauseSubState extends MusicBeatSubstate
 		var blueballedTxt:FlxText = new FlxText(20, 15 + 64, 0, "", 32);
 		blueballedTxt.text = "Burrito'd: " + PlayState.deathCounter;
 		blueballedTxt.scrollFactor.set();
-		blueballedTxt.setFormat(Paths.font('vcr.ttf'), 32);
+		blueballedTxt.setFormat(Paths.font('vcr.ttf'), 48);
 		blueballedTxt.updateHitbox();
 		add(blueballedTxt);
 		if (PlayState.SONG.song == "nyan")
@@ -81,7 +81,7 @@ class PauseSubState extends MusicBeatSubstate
 
 		practiceText = new FlxText(20, 15 + 101, 0, "PRACTICE MODE", 32);
 		practiceText.scrollFactor.set();
-		practiceText.setFormat(Paths.font('vcr.ttf'), 32);
+		practiceText.setFormat(Paths.font('vcr.ttf'), 48);
 		practiceText.x = FlxG.width - (practiceText.width + 20);
 		practiceText.updateHitbox();
 		practiceText.visible = PlayState.practiceMode;
@@ -91,7 +91,7 @@ class PauseSubState extends MusicBeatSubstate
 
 		botplayText = new FlxText(20, FlxG.height - 40, 0, "BOTPLAY", 32);
 		botplayText.scrollFactor.set();
-		botplayText.setFormat(Paths.font('vcr.ttf'), 32);
+		botplayText.setFormat(Paths.font('vcr.ttf'), 48);
 		botplayText.x = FlxG.width - (botplayText.width + 20);
 		botplayText.updateHitbox();
 		botplayText.visible = PlayState.cpuControlled;
@@ -117,7 +117,7 @@ class PauseSubState extends MusicBeatSubstate
 
 		for (i in 0...menuItems.length)
 		{
-			var songText:Alphabet = new Alphabet(0, (70 * i) + 30, PlayState.SONG.song == "nyan" ? "nyan" : menuItems[i], true, false);
+			var songText:Alphabet = new Alphabet(0, (70 * i) + 30, PlayState.SONG.song == "nyan" ? "nyan" : menuItems[i], true);
 			songText.isMenuItem = true;
 			songText.targetY = i;
 			grpMenuShit.add(songText);
@@ -200,7 +200,7 @@ class PauseSubState extends MusicBeatSubstate
 					PlayState.leftSide = false;
 					CustomFadeTransition.nextCamera = transCamera;
 					if(PlayState.isStoryMode) {
-						MusicBeatState.switchState(new StoryMenuState());
+						MusicBeatState.switchState(new MainMenuState());
 					} else {
 						MusicBeatState.switchState(new FreeplayState());
 					}
@@ -227,7 +227,7 @@ class PauseSubState extends MusicBeatSubstate
 	{
 		curSelected += change;
 
-		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+		FlxG.sound.play(Paths.sound('scrollMenu'), 1);
 
 		if (curSelected < 0)
 			curSelected = menuItems.length - 1;
@@ -257,7 +257,7 @@ class PauseSubState extends MusicBeatSubstate
 			this.grpMenuShit.remove(this.grpMenuShit.members[0], true);
 		}
 		for (i in 0...menuItems.length) {
-			var item = new Alphabet(0, 70 * i + 30, menuItems[i], true, false);
+			var item = new Alphabet(0, 70 * i + 30, menuItems[i], true);
 			item.isMenuItem = true;
 			item.targetY = i;
 			grpMenuShit.add(item);

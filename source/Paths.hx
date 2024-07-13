@@ -70,36 +70,14 @@ class Paths
 		currentLevel = name.toLowerCase();
 	}
 
-	public static function getPath(file:String, type:AssetType, ?library:Null<String> = null)
+	public static function getPath(file:String, ?type:AssetType, ?library:Null<String> = null)
 	{
-		if (library != null)
-			return getLibraryPath(file, library);
-
-		if (currentLevel != null)
-		{
-			var levelPath:String = '';
-			if(currentLevel != 'shared') {
-				levelPath = getLibraryPathForce(file, currentLevel);
-				if (OpenFlAssets.exists(levelPath))
-					return levelPath;
-			}
-
-			levelPath = getLibraryPathForce(file, "shared");
-			if (OpenFlAssets.exists(levelPath))
-				return levelPath;
-		}
-
 		return getPreloadPath(file);
 	}
 
 	static public function getLibraryPath(file:String, library = "preload")
 	{
-		return if (library == "preload" || library == "default") getPreloadPath(file); else getLibraryPathForce(file, library);
-	}
-
-	inline static function getLibraryPathForce(file:String, library:String)
-	{
-		return '$library:assets/$library/$file';
+		return getPreloadPath(file);
 	}
 
 	inline public static function getPreloadPath(file:String = '')
@@ -143,7 +121,7 @@ class Paths
 		return 'assets/videos/$key.$VIDEO_EXT';
 	}
 
-	static public function sound(key:String, ?library:String):Dynamic
+	static public function sound(key:String, ?library:String):Sound
 	{
 		var file:String = modsSounds(key);
 		if (!FileSystem.exists(file))
@@ -197,11 +175,8 @@ class Paths
 
 	inline static public function image(key:String, ?library:String):Dynamic
 	{
-		#if MODS_ALLOWED
 		var imageToReturn:FlxGraphic = addCustomGraphic(key);
-		if(imageToReturn != null) return imageToReturn;
-		#end
-		return getPath('images/$key.png', IMAGE, library);
+		return imageToReturn;
 	}
 	
 	static public function getTextFromFile(key:String, ?ignoreMods:Bool = false):String
@@ -212,20 +187,6 @@ class Paths
 
 		if (FileSystem.exists(getPreloadPath(key)))
 			return File.getContent(getPreloadPath(key));
-
-		if (currentLevel != null)
-		{
-			var levelPath:String = '';
-			if(currentLevel != 'shared') {
-				levelPath = getLibraryPathForce(key, currentLevel);
-				if (FileSystem.exists(levelPath))
-					return File.getContent(levelPath);
-			}
-
-			levelPath = getLibraryPathForce(key, 'shared');
-			if (FileSystem.exists(levelPath))
-				return File.getContent(levelPath);
-		}
 		#end
 		return Assets.getText(getPath(key, TEXT));
 	}
@@ -237,13 +198,8 @@ class Paths
 
 	inline static public function fileExists(key:String, type:AssetType, ?ignoreMods:Bool = false, ?library:String)
 	{
-		#if MODS_ALLOWED
-		if(FileSystem.exists(mods(currentModDirectory + '/' + key)) || FileSystem.exists(mods(key))) {
-			return true;
-		}
-		#end
-		
-		if(OpenFlAssets.exists(Paths.getPath(key, type))) {
+		if (FileSystem.exists(Paths.getPath(key))) 
+		{
 			return true;
 		}
 		return false;
@@ -251,17 +207,8 @@ class Paths
 
 	inline static public function getSparrowAtlas(key:String, ?library:String)
 	{
-		#if MODS_ALLOWED
 		var imageLoaded:FlxGraphic = addCustomGraphic(key);
-		var xmlExists:Bool = false;
-		if(FileSystem.exists(modsXml(key))) {
-			xmlExists = true;
-		}
-
-		return FlxAtlasFrames.fromSparrow((imageLoaded != null ? imageLoaded : image(key, library)), (xmlExists ? File.getContent(modsXml(key)) : file('images/$key.xml', library)));
-		#else
-		return FlxAtlasFrames.fromSparrow(image(key, library), file('images/$key.xml', library));
-		#end
+		return FlxAtlasFrames.fromSparrow(imageLoaded, File.getContent(getPath('images/$key.xml')));
 	}
 
 	inline static public function getPackerAtlas(key:String, ?library:String)
@@ -288,9 +235,10 @@ class Paths
 	
 	#if MODS_ALLOWED
 	static public function addCustomGraphic(key:String):FlxGraphic {
-		if(FileSystem.exists(modsImages(key))) {
+		var path = getPath("images/" + key + ".png");
+		if(FileSystem.exists(path)) {
 			if(!customImagesLoaded.exists(key)) {
-				var newGraphic:FlxGraphic = FlxGraphic.fromBitmapData(BitmapData.fromFile(modsImages(key)));
+				var newGraphic:FlxGraphic = FlxGraphic.fromBitmapData(BitmapData.fromFile(path), false, key, false);
 				newGraphic.persist = true;
 				customImagesLoaded.set(key, newGraphic);
 			}

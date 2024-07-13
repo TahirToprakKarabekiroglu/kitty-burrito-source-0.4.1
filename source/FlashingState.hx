@@ -20,38 +20,22 @@ class FlashingState extends MusicBeatState
 	{
 		super.create();
 
-		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
-		add(bg);
-
-		warnText = new FlxText(0, 0, FlxG.width,
-			"This mod contains contains remakes
-			of my favorite songs.\nThey were added just for fun.
-			\nOriginal ones can be found in credits and beginning of the songs.
-			\nPress ENTER to continue.",
-			32);
-		warnText.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, CENTER);
-		warnText.screenCenter(Y);
-		add(warnText);
+		var dialogue:Dialogue = new Dialogue(["[This is a joke mod.]",
+		"[This mod contains remixes of my favourite songs.]",
+		"[Their original can be found at credits menu.]",
+		"[You can also access the originals at the box that appears at start.]",
+		"[Enjoy Burrito Kitty PERFECTED CUT. =)]"]);
+		dialogue.onClose = () -> {
+			leftState = true;
+			FlxG.save.data.sawCat = true;
+			FlxG.save.flush();
+			MusicBeatState.switchState(new TitleState());
+		}
+		add(dialogue);
 	}
 
 	override function update(elapsed:Float)
 	{
-		if(!leftState) {
-			if (controls.ACCEPT) {
-				leftState = true;
-				FlxTransitionableState.skipNextTransIn = true;
-				FlxTransitionableState.skipNextTransOut = true;
-
-				FlxG.sound.play(Paths.sound('cancelMenu'));
-				FlxTween.tween(warnText, {alpha: 0}, 1, {
-					onComplete: function (twn:FlxTween) {
-						FlxG.save.data.sawCat = true;
-						FlxG.save.flush();
-						MusicBeatState.switchState(new TitleState());
-					}
-				});
-			}
-		}
 		super.update(elapsed);
 	}
 }

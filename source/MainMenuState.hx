@@ -1,5 +1,6 @@
 package;
 
+import flixel.util.FlxTimer;
 #if desktop
 import Discord.DiscordClient;
 #end
@@ -17,13 +18,12 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import lime.app.Application;
-import editors.MasterEditorMenu;
 
 using StringTools;
 
 class MainMenuState extends MusicBeatState
 {
-	public static var psychEngineVersion:String = '0.4.1-burrito'; //This is also used for Discord RPC
+	public static var psychEngineVersion:String = '0.4.1'; //This is also used for Discord RPC
 	public static var curSelected:Int = 0;
 
 	var menuItems:FlxTypedGroup<FlxSprite>;
@@ -32,7 +32,7 @@ class MainMenuState extends MusicBeatState
 
 	var kitty:FlxSprite;
 	
-	var optionShit:Array<String> = ['story_mode', 'freeplay', 'credits','options'];
+	var optionShit:Array<String> = ['Story', 'Freeplay', 'Credits','Options'];
 
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
@@ -41,7 +41,9 @@ class MainMenuState extends MusicBeatState
 	override function create()
 	{
 		if (FlxG.save.data.finishedStory != true)
-			optionShit.remove('freeplay');
+			optionShit.remove('Freeplay');
+
+		WeekData.reloadWeekFiles(true);
 		#if desktop
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
@@ -76,7 +78,7 @@ class MainMenuState extends MusicBeatState
 		magenta.screenCenter();
 		magenta.visible = false;
 		magenta.antialiasing = ClientPrefs.globalAntialiasing;
-		magenta.color = 0xFFfd719b;
+		magenta.color = 0xfff53c3c;
 		add(magenta);
 		// magenta.scrollFactor.set();
 
@@ -88,12 +90,11 @@ class MainMenuState extends MusicBeatState
 		for (i in 0...optionShit.length)
 		{
 			var offset:Float = 108 - (Math.max(optionShit.length, 4) - 4) * 80;
-			var menuItem:FlxSprite = new FlxSprite(0, (i * 140)  + offset);
-			menuItem.frames = Paths.getSparrowAtlas('mainmenu/menu_' + optionShit[i]);
-			menuItem.animation.addByPrefix('idle', optionShit[i] + " basic", 24);
-			menuItem.animation.addByPrefix('selected', optionShit[i] + " white", 24);
-			menuItem.animation.play('idle');
+			var menuItem:FlxText = new FlxText(0, offset / 2);
+			menuItem.setFormat(Paths.font("vcr.ttf"), 192, FlxColor.BLACK);
+			menuItem.text = optionShit[i];
 			menuItem.ID = i;
+			menuItem.y += i * 150;
 			menuItem.screenCenter(X);
 			menuItems.add(menuItem);
 			var scr:Float = (optionShit.length - 4) * 0.135;
@@ -106,17 +107,17 @@ class MainMenuState extends MusicBeatState
 
 		FlxG.camera.follow(camFollowPos, null, 1);
 
-		var versionShit:FlxText = new FlxText(12, FlxG.height - 64, 0, "FNF Burrito Kitty v618", 12);
+		var versionShit:FlxText = new FlxText(12, FlxG.height - 64, 0, "Burrito Kitty PERFECTED CUT v618", 12);
 		versionShit.scrollFactor.set();
-		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		versionShit.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
 		var versionShit:FlxText = new FlxText(12, FlxG.height - 44, 0, "Burrito Engine v" + psychEngineVersion, 12);
 		versionShit.scrollFactor.set();
-		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		versionShit.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
-		var versionShit:FlxText = new FlxText(12, FlxG.height - 24, 0, "Friday Night Funkin' v" + Application.current.meta.get('version'), 12);
+		var versionShit:FlxText = new FlxText(12, FlxG.height - 24, 0, "Friday Night Funkin' v" + "0.2.8", 12);
 		versionShit.scrollFactor.set();
-		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		versionShit.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
 
 		// NG.core.calls.event.logEvent('swag').send();
@@ -149,6 +150,7 @@ class MainMenuState extends MusicBeatState
 
 	var selectedSomethin:Bool = false;
 
+	var alphaSine:Float = 0;
 	override function update(elapsed:Float)
 	{
 		if (FlxG.sound.music.volume < 0.8)
@@ -159,6 +161,10 @@ class MainMenuState extends MusicBeatState
 		var lerpVal:Float = CoolUtil.boundTo(elapsed * 5.6, 0, 1);
 		camFollowPos.setPosition(FlxMath.lerp(camFollowPos.x, camFollow.x, lerpVal), FlxMath.lerp(camFollowPos.y, camFollow.y, lerpVal));
 
+		alphaSine += elapsed * 180;
+		if (!optionShit.contains("Freeplay"))
+			menuItems.members[0].alpha = 1 - Math.sin((Math.PI * alphaSine) / 180);
+		
 		if (!selectedSomethin)
 		{
 			if (controls.UI_UP_P)
@@ -211,10 +217,27 @@ class MainMenuState extends MusicBeatState
 							FlxFlicker.flicker(spr, 1, 0.06, false, false, function(flick:FlxFlicker)
 							{
 								var daChoice:String = optionShit[curSelected];
-								switch (daChoice)
+								switch (daChoice.toLowerCase())
 								{
-									case 'story_mode':
-										MusicBeatState.switchState(new StoryMenuState());
+									case 'story':
+										var songArray:Array<String> = [];
+										var leWeek:Array<Dynamic> = WeekData.weeksLoaded.get(WeekData.weeksList[0]).songs;
+										for (i in 0...leWeek.length) {
+											songArray.push(leWeek[i][0]);
+										}
+										PlayState.storyPlaylist = songArray;
+										PlayState.isStoryMode = true;
+
+										var diffic = CoolUtil.difficultyStuff[0][1];
+
+										PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + diffic, PlayState.storyPlaylist[0].toLowerCase());
+										PlayState.storyWeek = 0;
+										PlayState.campaignScore = 0;
+										PlayState.campaignMisses = 0;
+										PlayState.leftSide = false;
+										
+										LoadingState.loadAndSwitchState(new PlayState(), true);
+										FreeplayState.destroyFreeplayVocals();
 									case 'freeplay':
 										MusicBeatState.switchState(new FreeplayState());
 									case 'credits':
@@ -248,18 +271,16 @@ class MainMenuState extends MusicBeatState
 
 		menuItems.forEach(function(spr:FlxSprite)
 		{
-			spr.animation.play('idle');
 			spr.offset.y = 0;
 			spr.updateHitbox();
 
 			if (spr.ID == curSelected)
 			{
-				spr.animation.play('selected');
 				camFollow.setPosition(spr.getGraphicMidpoint().x, spr.getGraphicMidpoint().y);
-				spr.offset.x = 0.15 * (spr.frameWidth / 2 + 180);
+				spr.offset.x = (spr.width / 4) * (curSelected % 2 == 0 ? 1 : -1);
 				spr.offset.y = 0.15 * spr.frameHeight;
 				kitty.scrollFactor.set(spr.scrollFactor.x, spr.scrollFactor.y);
-				kitty.setPosition(spr.x + spr.offset.x - 320, spr.y - spr.offset.y + 10);
+				kitty.setPosition(spr.x - spr.offset.x - kitty.width - 20, spr.y - spr.offset.y + 10);
 				FlxG.log.add(spr.frameWidth);
 			}
 		});
