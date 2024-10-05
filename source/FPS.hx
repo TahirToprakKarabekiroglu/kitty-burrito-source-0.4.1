@@ -69,8 +69,8 @@ class FPS extends TextField
 
 		var currentCount = times.length;
 		currentFPS = Math.round((currentCount + cacheCount) / 2);
-		if (currentFPS > 60)
-			currentFPS = 60;
+		if (currentFPS > 144)
+			currentFPS = 144;
 
 		if (PlayState.SONG != null && PlayState.SONG.song == "nyan" && (FlxG.state is PlayState))
 			text = "nyan: nyan";

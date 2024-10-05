@@ -58,6 +58,8 @@ class Song
 
 		if (jsonInput.indexOf('title.wma') > -1)
 			jsonInput = "title.wma";
+		else if (jsonInput.indexOf('bgmusic00') > -1)
+			jsonInput = "bgmusic00";
 		
 		var formattedFolder:String = Paths.formatToSongPath(folder);
 		var formattedSong:String = Paths.formatToSongPath(jsonInput);

@@ -25,7 +25,7 @@ class FakeGameOverSubstate extends MusicBeatSubstate
 	var heyPos:Bool;
     var characterName:String = 'bf';
 	var deathSoundName:String = 'fnf_loss_sfx';
-	var loopSoundName:String = 'loop';
+	var loopSoundName:String = 'over';
 	var endSoundName:String = 'confirmMenu';
     var fakeCamera:FlxCamera = null;
 

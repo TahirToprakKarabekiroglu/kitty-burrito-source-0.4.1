@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="HIGH_strum.png">
+	<!-- Created with Adobe Animate version 23.0.7.149 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="arrowDOWN0000" x="2" y="2" width="157" height="195"/>
+	<SubTexture name="arrowUP0000" x="161" y="2" width="157" height="195"/>
+	<SubTexture name="down confirm0000" x="320" y="2" width="238" height="252"/>
+	<SubTexture name="down confirm0001" x="560" y="2" width="238" height="252"/>
+	<SubTexture name="down confirm0002" x="800" y="2" width="220" height="231" frameX="-6" frameY="-12" frameWidth="238" frameHeight="252"/>
+	<SubTexture name="down confirm0003" x="800" y="2" width="220" height="231" frameX="-6" frameY="-12" frameWidth="238" frameHeight="252"/>
+	<SubTexture name="down press0000" x="2" y="256" width="142" height="177" frameX="-4" frameY="-2" frameWidth="149" frameHeight="187"/>
+	<SubTexture name="down press0001" x="2" y="256" width="142" height="177" frameX="-4" frameY="-2" frameWidth="149" frameHeight="187"/>
+	<SubTexture name="down press0002" x="146" y="256" width="149" height="187"/>
+	<SubTexture name="down press0003" x="146" y="256" width="149" height="187"/>
+	<SubTexture name="up confirm0000" x="297" y="256" width="236" height="250"/>
+	<SubTexture name="up confirm0001" x="535" y="256" width="236" height="250"/>
+	<SubTexture name="up confirm0002" x="773" y="256" width="214" height="230" frameX="-11" frameY="-9" frameWidth="236" frameHeight="250"/>
+	<SubTexture name="up confirm0003" x="773" y="256" width="214" height="230" frameX="-11" frameY="-9" frameWidth="236" frameHeight="250"/>
+	<SubTexture name="up press0000" x="2" y="508" width="144" height="176" frameX="-5" frameY="-8" frameWidth="153" frameHeight="189"/>
+	<SubTexture name="up press0001" x="2" y="508" width="144" height="176" frameX="-5" frameY="-8" frameWidth="153" frameHeight="189"/>
+	<SubTexture name="up press0002" x="148" y="508" width="153" height="189"/>
+	<SubTexture name="up press0003" x="148" y="508" width="153" height="189"/>
+</TextureAtlas>

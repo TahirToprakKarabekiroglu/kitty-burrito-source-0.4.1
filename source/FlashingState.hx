@@ -20,11 +20,11 @@ class FlashingState extends MusicBeatState
 	{
 		super.create();
 
-		var dialogue:Dialogue = new Dialogue(["[This is a joke mod.]",
-		"[This mod contains remixes of my favourite songs.]",
-		"[Their original can be found at credits menu.]",
-		"[You can also access the originals at the box that appears at start.]",
-		"[Enjoy Burrito Kitty PERFECTED CUT. =)]"]);
+		var dialogue:FirstDialogue = new FirstDialogue(["This is a joke mod.",
+		"This mod contains remixes of my favourite songs.",
+		"Their original can be found at credits menu.",
+		"You can also access the originals at the box that appears at start.",
+		"Enjoy Burrito Kitty PERFECTED CUT. =)"]);
 		dialogue.onClose = () -> {
 			leftState = true;
 			FlxG.save.data.sawCat = true;

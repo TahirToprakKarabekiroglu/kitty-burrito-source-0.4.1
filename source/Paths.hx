@@ -156,7 +156,10 @@ class Paths
 
 	inline static public function inst(song:String):Sound
 	{
-		var file:Sound = returnSongFile(song, 'Inst');
+		var s = "Inst";
+		if (song == "bgmusic00")
+			s = "bgmusic00";
+		var file:Sound = returnSongFile(song, s);
 		return file;
 	}
 

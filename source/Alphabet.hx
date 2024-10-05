@@ -15,7 +15,7 @@ using StringTools;
 /**
  * Loosley based on FlxTypeText lolol
  */
-class Alphabet extends FlxTypedSpriteGroup<FlxText>
+class Alphabet extends FlxSpriteGroup
 {
 	public var delay:Float = 0.05;
 	public var paused:Bool = false;
@@ -154,6 +154,16 @@ class Alphabet extends FlxTypedSpriteGroup<FlxText>
 
 	var typeTimer:FlxTimer = null;
 
+	override function set_color(color:FlxColor)
+	{
+		for (i in members)
+		{
+			i.color = color;
+		}
+
+		return this.color = color;
+	}
+
 	override function update(elapsed:Float)
 	{
 		if (isMenuItem)
@@ -178,16 +188,6 @@ class Alphabet extends FlxTypedSpriteGroup<FlxText>
 			typeTimer.destroy();
 		}
 		typeTimer = null;
-	}
-
-	override function set_y(y:Float)
-	{
-		for (i in members)
-		{
-			i.y = y;
-		}
-
-		return this.y = y;
 	}
 }
 

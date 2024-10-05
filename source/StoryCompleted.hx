@@ -35,7 +35,7 @@ class StoryCompleted extends MusicBeatSubstate
 
         var newText = new FlxText();
         newText.setFormat(Paths.font('vcr.ttf'), 48, CENTER);
-        var text = "Finish )Insanity), )Warmth Without Insanity) and\n)Insanity on Earth) as ?BurritoFriend? to unlock )Original) songs.";
+        var text = "Finish )Insanity), )Sanity) and\n)Warmth Without Insanity) as ?BurritoFriend? to unlock )Original) songs.";
         newText.applyMarkup(text, [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.YELLOW), ')'),
             new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.CYAN), '?')]);
         newText.screenCenter();

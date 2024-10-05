@@ -50,6 +50,8 @@ class Character extends FlxSprite
 	public var curCharacter:String = DEFAULT_CHARACTER;
 	public var onPlay:(AnimName:String, Force:Bool, Reversed:Bool, Frame:Int) -> Void;
 
+	public var isSad:Bool = false;
+
 	public var colorTween:FlxTween;
 	public var holdTimer:Float = 0;
 	public var heyTimer:Float = 0;
@@ -281,6 +283,7 @@ class Character extends FlxSprite
 		}
 	}
 
+	public var animAdd:String = "";
 	public function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void
 	{
 		if (!canPlay)
@@ -291,9 +294,12 @@ class Character extends FlxSprite
 
 		if (onPlay != null)
 			onPlay(AnimName, Force, Reversed, Frame);
-		
+
+		if (isSad && isPlayer && ["idle", "singLEFT", "singDOWN", "singUP", "singRIGHT"].contains(AnimName) && animation.exists(AnimName + "-sad"))
+			AnimName += "-sad";
+
 		specialAnim = false;
-		animation.play(AnimName, Force, Reversed, Frame);
+		animation.play(AnimName + animAdd, Force, Reversed, Frame);
 
 		var daOffset = animOffsets.get(AnimName);
 		if (animOffsets.exists(AnimName))

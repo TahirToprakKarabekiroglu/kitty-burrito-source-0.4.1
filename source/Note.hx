@@ -117,6 +117,18 @@ class Note extends FlxSprite
 					colorSwap.hue = 0;
 					colorSwap.saturation = 0;
 					colorSwap.brightness = 0;
+				case 'Higher Note': 
+					ignoreNote = false;
+					var alt = "";
+					if (ClientPrefs.downScroll)
+						alt = "_downscroll";
+					reloadNote("HIGH_", "assets", alt);
+					noteSplashTexture = null;
+					colorSwap.hue = 0;
+					colorSwap.saturation = 0;
+					colorSwap.brightness = 0;
+					copyAlpha = false;
+					//earlyHitMult = 0.5;
 			}
 			noteType = value;
 		}
@@ -132,6 +144,9 @@ class Note extends FlxSprite
 
 		if (prevNote == null)
 			prevNote = this;
+
+		if (PlayState.SONG != null && Paths.formatToSongPath(PlayState.SONG.song) == "cats!!")
+			offsetX = 5;
 
 		this.prevNote = prevNote;
 		isSustainNote = sustainNote;
@@ -194,6 +209,12 @@ class Note extends FlxSprite
 			updateHitbox();
 			offsetX -= width / 2;
 
+			if (PlayState.SONG != null && Paths.formatToSongPath(PlayState.SONG.song) == "cats!!")
+			{
+				scale.x *= 4;
+				offsetX += width / 2 + 40;
+			}
+
 			if (PlayState.isPixelStage)
 				offsetX += 30;
 
@@ -218,6 +239,8 @@ class Note extends FlxSprite
 				}
 				prevNote.updateHitbox();
 				// prevNote.setGraphicSize();
+				if (PlayState.SONG != null && Paths.formatToSongPath(PlayState.SONG.song) == "cats!!")
+					prevNote.offsetX -= prevNote.width / 4 + 25;
 			}
 
 			if(PlayState.isPixelStage) {
@@ -244,6 +267,8 @@ class Note extends FlxSprite
 				skin = 'NOTE_assets';
 			}
 		}
+		if (PlayState.SONG != null && Paths.formatToSongPath(PlayState.SONG.song) == "cats!!")
+			skin = "CATS!!";
 
 		var animName:String = null;
 		if(animation.curAnim != null) {
@@ -350,7 +375,7 @@ class Note extends FlxSprite
 			canBeHit = false;
 		else
 		{
-			if (mustPress)
+			if (mustPress && noteType != "Bah!")
 			{
 				var earlyHitMultMinus = Note.earlyHitMultMinus;
 				if (isSustainNote)

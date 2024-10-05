@@ -62,24 +62,7 @@ class TitleState extends MusicBeatState
 
 		FlxG.mouse.visible = false;
         FlxG.mouse.load(BitmapData.fromFile("assets/images/cursor.png"));
-		
-		#if (polymod && !html5)
-		if (sys.FileSystem.exists('mods/')) {
-			var folders:Array<String> = [];
-			for (file in sys.FileSystem.readDirectory('mods/')) {
-				var path = haxe.io.Path.join(['mods/', file]);
-				if (sys.FileSystem.isDirectory(path)) {
-					folders.push(file);
-				}
-			}
-			if(folders.length > 0) {
-				polymod.Polymod.init({modRoot: "mods", dirs: folders});
-			}
-		}
-		//Gonna finish this later, probably
-		#end
 
-		
 		FlxG.game.focusLostFramerate = 60;
 		FlxG.sound.muteKeys = muteKeys;
 		FlxG.sound.volumeDownKeys = volumeDownKeys;
@@ -94,7 +77,7 @@ class TitleState extends MusicBeatState
 		swagShader = new ColorSwap();
 		super.create();
 
-		FlxG.save.bind('burritokitty', 'kittyburrito');
+		FlxG.save.bind('Burrito_Kitty', 'TahirToprakKarabekiroglu');
 		ClientPrefs.loadPrefs();
 
 		Highscore.load();
@@ -329,6 +312,19 @@ class TitleState extends MusicBeatState
 	}
 
 	private static var closedState:Bool = false;
+
+	override function stepHit() {
+		super.stepHit();
+		
+		if (!closedState)
+			switch curStep
+			{
+				case 58:
+					addMoreText('Burrito', -60);
+					logoSpr.visible = true;
+			}
+	}
+
 	override function beatHit()
 	{
 		super.beatHit();
@@ -344,7 +340,7 @@ class TitleState extends MusicBeatState
 					deleteCoolText();
 				case 10:
 					createCoolText(['Kitty'], -60);
-				case 14:
+				case 150:
 					addMoreText('Burrito', -60);
 					logoSpr.visible = true;
 				case 16:

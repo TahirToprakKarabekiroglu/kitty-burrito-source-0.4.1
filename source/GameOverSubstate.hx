@@ -26,13 +26,13 @@ class GameOverSubstate extends MusicBeatSubstate
 	var heyPos:Bool;
 	public static var characterName:String = 'bf';
 	public static var deathSoundName:String = 'fnf_loss_sfx';
-	public static var loopSoundName:String = 'loop';
+	public static var loopSoundName:String = 'over';
 	public static var endSoundName:String = 'confirmMenu';
 
 	public static function resetVariables() {
 		characterName = 'bf';
 		deathSoundName = 'fnf_loss_sfx';
-		loopSoundName = 'loop';
+		loopSoundName = 'over';
 		endSoundName = 'confirmMenu';
 	}
 
@@ -135,7 +135,7 @@ class GameOverSubstate extends MusicBeatSubstate
 			else
 				MusicBeatState.switchState(new FreeplayState());
 			if (bf.animation.curAnim != null && !bf.animation.curAnim.finished)
-				coolStartDeath();
+				FlxG.sound.playMusic(Paths.music("loop"));
 		}
 
 		if (FlxG.sound.music.playing)

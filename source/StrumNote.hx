@@ -17,10 +17,13 @@ class StrumNote extends FlxSprite
 	var twn:FlxTween;
 	var finalTwn:FlxTween;
 
+	public var offsetY(default, set):Float = 0;
+
 	private var colorSwap:ColorSwap;
 	public var resetAnim:Float = 0;
 	public var noteData:Int = 0;
 
+	public var centerOffs:Bool = true;
 	public var holdSprite:FlxSprite;
 
 	public function new(x:Float, y:Float, leData:Int) {
@@ -108,6 +111,12 @@ class StrumNote extends FlxSprite
 		}
 	}
 
+	override public function centerOffsets(a:Bool = false)
+	{
+		if (centerOffs)
+			super.centerOffsets(a);
+	}
+
 	function updateConfirmOffset() { //TO DO: Find a calc to make the offset work fine on other angles
 		centerOffsets();
 		centerOrigin();
@@ -125,5 +134,11 @@ class StrumNote extends FlxSprite
 		});
 
 		return value;
+	}
+
+	function set_offsetY(value:Float):Float 
+	{
+		//y += value;
+		return offsetY = value;
 	}
 }

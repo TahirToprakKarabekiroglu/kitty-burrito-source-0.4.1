@@ -42,10 +42,8 @@ class PauseXPSubState extends MusicBeatSubstate
 
         cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 
-        // Apply the initial color matrix filter (no grayscale)
         applyColorMatrix(0);
         
-        // Start the transition
         timer = new FlxTimer().start(0.3, updateTransition, 10);
     }
 
@@ -120,12 +118,10 @@ class PauseXPSubState extends MusicBeatSubstate
 
     function updateTransition(timer:FlxTimer) 
     {
-        // Gradually increase the transition value
-        transition += 0.1; // Adjust speed as needed
+        transition += 0.1;
         if (transition > 1) transition = 1;
         if (transition > 0.2) canClose = true;
 
-        // Apply the color matrix filter with the updated transition value
         applyColorMatrix(transition);
     }
 
@@ -134,7 +130,6 @@ class PauseXPSubState extends MusicBeatSubstate
         if (color == null)
             color = new ColorMatrixFilter();
 
-        // Create the current color matrix by blending the identity matrix and the grayscale matrix
         var currentMatrix:Array<Float> = [
             (1 - transition) + grayscaleMatrix[0] * transition, grayscaleMatrix[1] * transition, grayscaleMatrix[2] * transition, 0, 0,
             grayscaleMatrix[5] * transition, (1 - transition) + grayscaleMatrix[6] * transition, grayscaleMatrix[7] * transition, 0, 0,

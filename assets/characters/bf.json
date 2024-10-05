@@ -3,18 +3,7 @@
 		{
 			"loop": false,
 			"offsets": [
-				-6,
-				0
-			],
-			"anim": "idle",
-			"fps": 24,
-			"name": "BF idle dance",
-			"indices": []
-		},
-		{
-			"loop": false,
-			"offsets": [
-				-21,
+				-8,
 				-51
 			],
 			"anim": "singDOWN",
@@ -25,8 +14,8 @@
 		{
 			"loop": false,
 			"offsets": [
-				-22,
-				33
+				-5,
+				31
 			],
 			"anim": "singUP",
 			"fps": 24,
@@ -35,7 +24,7 @@
 		},
 		{
 			"offsets": [
-				-4,
+				11,
 				-6
 			],
 			"loop": false,
@@ -47,8 +36,8 @@
 		{
 			"loop": false,
 			"offsets": [
-				-50,
-				-5
+				-35,
+				-6
 			],
 			"anim": "singRIGHT",
 			"fps": 24,
@@ -57,7 +46,7 @@
 		},
 		{
 			"offsets": [
-				5,
+				15,
 				-6
 			],
 			"loop": false,
@@ -68,7 +57,7 @@
 		},
 		{
 			"offsets": [
-				-50,
+				-30,
 				-7
 			],
 			"loop": false,
@@ -90,7 +79,7 @@
 		},
 		{
 			"offsets": [
-				-15,
+				-5,
 				32
 			],
 			"loop": false,
@@ -102,7 +91,7 @@
 		{
 			"loop": false,
 			"offsets": [
-				481,
+				491,
 				294
 			],
 			"anim": "deathConfirm",
@@ -112,8 +101,8 @@
 		},
 		{
 			"offsets": [
-				-29,
-				-9
+				-19,
+				-10
 			],
 			"loop": false,
 			"fps": 24,
@@ -123,7 +112,7 @@
 		},
 		{
 			"offsets": [
-				-14,
+				-4,
 				5
 			],
 			"loop": false,
@@ -135,7 +124,7 @@
 		{
 			"loop": true,
 			"offsets": [
-				-19,
+				-9,
 				1
 			],
 			"anim": "deathLoop",
@@ -146,7 +135,7 @@
 		{
 			"loop": false,
 			"offsets": [
-				-30,
+				-20,
 				-10
 			],
 			"anim": "firstDeath",
@@ -157,19 +146,97 @@
 		{
 			"loop": false,
 			"offsets": [
-				0,
-				19
+				16,
+				18
 			],
 			"anim": "hit",
 			"fps": 24,
 			"name": "BF hit0",
 			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				2,
+				18
+			],
+			"anim": "confused",
+			"fps": 24,
+			"name": "BF confused0",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				-5,
+				0
+			],
+			"anim": "idle",
+			"fps": 24,
+			"name": "BF idle dance0",
+			"indices": []
+		},
+		{
+			"offsets": [
+				-5,
+				0
+			],
+			"indices": [],
+			"fps": 24,
+			"anim": "idle-sad",
+			"loop": false,
+			"name": "BF idle dance sad0"
+		},
+		{
+			"offsets": [
+				-8,
+				-51
+			],
+			"indices": [],
+			"fps": 24,
+			"anim": "singDOWN-sad",
+			"loop": false,
+			"name": "BF NOTE DOWN sad0"
+		},
+		{
+			"offsets": [
+				-5,
+				31
+			],
+			"indices": [],
+			"fps": 24,
+			"anim": "singUP-sad",
+			"loop": false,
+			"name": "BF NOTE UP sad0"
+		},
+		{
+			"offsets": [
+				11,
+				-6
+			],
+			"indices": [],
+			"fps": 24,
+			"anim": "singLEFT-sad",
+			"loop": false,
+			"name": "BF NOTE LEFT sad0"
+		},
+		{
+			"offsets": [
+				-35,
+				-6
+			],
+			"indices": [],
+			"fps": 24,
+			"anim": "singRIGHT-sad",
+			"loop": false,
+			"name": "BF NOTE RIGHT sad0"
 		}
 	],
+	"vocals_file": "",
 	"no_antialiasing": false,
 	"image": "characters/BurritoFriend",
 	"position": [
-		0,
+		-55,
 		350
 	],
 	"healthicon": "bf",
@@ -184,5 +251,6 @@
 		0
 	],
 	"sing_duration": 4,
-	"scale": 1
+	"scale": 1,
+	"_editor_isPlayer": true
 }

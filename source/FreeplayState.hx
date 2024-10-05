@@ -1,5 +1,6 @@
 package;
 
+import flixel.tweens.FlxEase;
 import OptionsState.ControlsSubstate;
 #if desktop
 import Discord.DiscordClient;
@@ -26,10 +27,6 @@ class FreeplayState extends MusicBeatState
 {
 	var songs:Array<SongMetadata> = [];
 
-
-	var textA = "*+ Stronger Input*\n(- Health Disadvantage(\n(- Harder Charting(";
-	var textB = "*+ Health Advantage*\n(- Weaker Input(\n(- Bigger Punishment on Miss(";
-
 	var selector:FlxText;
 	public static var character:String = "BurritoFriend";
 	private static var curSelected:Int = 0;
@@ -43,7 +40,7 @@ class FreeplayState extends MusicBeatState
 	var intendedScore:Int = 0;
 	var intendedRating:Float = 0;
 
-	var featureText:FlxText;
+	var clockText:FlxText;
 
 	private var grpSongs:FlxTypedGroup<Alphabet>;
 	private var curPlaying:Bool = false;
@@ -53,6 +50,7 @@ class FreeplayState extends MusicBeatState
 	var bg:FlxSprite;
 	var intendedColor:Int;
 	var colorTween:FlxTween;
+	var bliss:FlxSprite;
 
 	override function create()
 	{
@@ -64,6 +62,8 @@ class FreeplayState extends MusicBeatState
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end
+
+		Conductor.changeBPM(180);
 
 		for (i in 0...WeekData.weeksList.length) {
 			var leWeek:WeekData = WeekData.weeksLoaded.get(WeekData.weeksList[i]);
@@ -102,29 +102,50 @@ class FreeplayState extends MusicBeatState
 		bg.antialiasing = ClientPrefs.globalAntialiasing;
 		add(bg);
 
+		bliss = new FlxSprite().loadGraphic(Paths.image("bliss"));
+		bliss.antialiasing = ClientPrefs.globalAntialiasing;
+		bliss.alpha = 0;
+		add(bliss);
+
 		grpSongs = new FlxTypedGroup<Alphabet>();
 		add(grpSongs);
+
+		songs.insert(0, new SongMetadata("STORY SONGS", 0, "", 0));
+		songs.insert(4, new SongMetadata("BONUS SONGS", 0, "", 0));
+		songs.insert(16, new SongMetadata("ORIGINAL SONGS", 0, "", 0));
 
 		for (i in 0...songs.length)
 		{
 			if (songs[i].songName == "Beginning of a New Insanity")
 				songs[i].songName = "B. of a New Insanity";
 
-			var song = ["title.wma", "Unholy Insanity Resonance", "Fireflies Tell Insanity", "Hold Your Insanity", "Insanity Found in Ruins", "We're Landing At Last", "Warmth Without Insanity", "Higher", "Insanity", "Silly but Sad Cat Song", "nyan", "Adequate Insanity", "Please Don't", "Insanity Infusion", "Insanity On Earth", "In the End, It's All Fine"];
-			var song2 = ["Insanity", "We're Landing At Last", "Warmth Without Insanity", "Silly but Sad Cat Song", "Adequate Insanity", "Please Don't", "Insanity Infusion", "Insanity On Earth", "In the End, It's All Fine"];
+			var song = ["title.wma", "Unholy Insanity Resonance", "Fireflies Tell Insanity", "Hold Your Insanity", "Insanity Found in Ruins", "We're Landing At Last", "Warmth Without Insanity", "Higher", "Insanity", "CATS!!", "nyan", "Adequate Insanity", "Please Don't", "Insanity Infusion", "Insanity On Earth", "In the End, It's All Fine", "bgmusic00", "Sanity", "Insanity Likes Your Face"];
+			var song2 = ["Insanity", "We're Landing At Last", "Warmth Without Insanity", "CATS!!", "Adequate Insanity", "Please Don't", "Insanity Infusion", "Insanity On Earth", "In the End, It's All Fine", "Sanity", "Insanity Likes Your Face"];
 			var songText:Alphabet = new Alphabet(0, (70 * i) + (songs[i].songName != 'title.wma' ? 30 : -70), songs[i].songName, !song.contains(songs[i].songName));
 			songText.isMenuItem = true;
 			songText.targetY = i;
 			grpSongs.add(songText);
+			if (songs[i].songName == 'title.wma')
+				songText.color = FlxColor.fromRGB(177, 255, 0);
+
+			if ([0, 4, 16].contains(i))
+			{
+				songText.scrollFactor.x = 0;
+				songText.screenCenter(X);
+				songText.xAdd += FlxG.width / 4;
+				//songText.color = "FlxColor.RED";
+			}
 
 			Paths.currentModDirectory = songs[i].folder;
 			var icon:HealthIcon = new HealthIcon(songs[i].songCharacter);
 			icon.sprTracker = songText;
-			if (song.contains(songs[i].songName) && !song2.contains(songs[i].songName))
+			if ((song.contains(songs[i].songName) && !song2.contains(songs[i].songName)) || [0, 4, 16].contains(i))
 				icon.visible = false;
 
 			if (icon.visible)
 				icon.animation.curAnim.curFrame = 2;
+			if (songs[i].songName == "Boys With Insanity")
+				icon.animation.curAnim.curFrame = 0;
 			// using a FlxGroup is too much fuss!
 			iconArray.push(icon);
 			add(icon);
@@ -148,10 +169,6 @@ class FreeplayState extends MusicBeatState
 		add(diffText);
 
 		add(scoreText);
-		
-		featureText = new FlxText();
-		featureText.setFormat(Paths.font("vcr.ttf"), 48);
-		featureText.visible = false;
 
 		if(curSelected >= songs.length) curSelected = 0;
 		bg.color = songs[curSelected].color;
@@ -159,19 +176,23 @@ class FreeplayState extends MusicBeatState
 		changeSelection();
 		changeDiff();
 
-		var textBG:FlxSprite = new FlxSprite(0, FlxG.height - 26).makeGraphic(FlxG.width, 26, 0xFF000000);
-		textBG.alpha = 0.6;
+		var textBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image("taskbar"));
+		textBG.y = FlxG.height - 25;
 		add(textBG);
 		#if PRELOAD_ALL
 		#else
 		var leText:String = "Press RESET to Reset your Score and Accuracy.";
 		#end
-		textT = new FlxText(textBG.x, textBG.y + 4, FlxG.width, leText, 18);
-		textT.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, CENTER);
+		textT = new FlxText(textBG.x, textBG.y + 5, FlxG.width, leText, 18);
+		textT.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER);
 		textT.scrollFactor.set();
 		add(textT);
 
-		add(featureText);
+		clockText = new FlxText();
+		clockText.setFormat(Paths.font("vcr.ttf"), 18); 
+		clockText.y = FlxG.height - clockText.height - 3;
+		clockText.text = "";
+		add(clockText);
 
 		super.create();
 	}
@@ -208,6 +229,8 @@ class FreeplayState extends MusicBeatState
 	private static var vocals:FlxSound = null;
 	override function update(elapsed:Float)
 	{
+		Conductor.songPosition = FlxG.sound.music.time;
+
 		if (songs[curSelected].songName == "nyan")
 		{
 			Main.fpsVar.text = "nyan: nyan";
@@ -239,20 +262,8 @@ class FreeplayState extends MusicBeatState
 
 		if (FlxG.save.data.finishedStory)
 		{
-			var textA = textA;
-			var textB = textB;
-
-			if (songs[curSelected].songName == "nyan")
-				textA = textB = "*+ nyan*\n(- nyan(\n(- nyan(";
-
-			featureText.visible = true;
-			featureText.x = scoreText.x;
-			featureText.y = scoreText.y + scoreText.height + scoreBG.height + 40;
 			var text:String = scoreText.text;
-			if (songs[curSelected].songName == "nyan")
-				text += "\n\nnyan: ";	
-			else
-				text += '\n\nCURRENT CHARACTER: ';
+			text += '\n\nCURRENT CHARACTER: ';
 			
 			if (character == 'BurritoFriend')
 			{
@@ -260,8 +271,6 @@ class FreeplayState extends MusicBeatState
 					text += "/nyan/";
 				else
 					text += '/$character/';
-				featureText.applyMarkup(textA, [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.GREEN), '*'),
-				new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED), '(')]);
 			}
 			else
 			{
@@ -269,8 +278,6 @@ class FreeplayState extends MusicBeatState
 					text += "\\nyan\\";
 				else
 					text += '\\$character\\';
-				featureText.applyMarkup(textB, [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.GREEN), '*'),
-				new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED), '(')]);
 			}
 			if (songs[curSelected].songName == "nyan")
 				text += "\nnyan";
@@ -299,7 +306,7 @@ class FreeplayState extends MusicBeatState
 		{
 			changeSelection(shiftMult);
 		}
-		if (shift && FlxG.save.data.finishedStory && songs[curSelected].songName != "Insanity Infusion")
+		if (shift && FlxG.save.data.finishedStory && songs[curSelected].songName != "Insanity Infusion" && songs[curSelected].songName != "Sanity" && songs[curSelected].songName != "Boys With Insanity")
 			character = character == "BurritoFriend" ? "Burrito Kitty" : "BurritoFriend";
 
 		if (controls.UI_LEFT_P)
@@ -426,17 +433,39 @@ class FreeplayState extends MusicBeatState
 		positionHighscore();
 	}
 
+	override function beatHit()
+	{
+		super.beatHit();
+
+		var date = Date.now();
+		var hour = "" + date.getHours();
+		var minute = "" + date.getMinutes();
+		if (hour.length < 2)
+			hour = "0" + hour;
+		if (minute.length < 2)
+			minute = "0" + minute;
+
+		clockText.text = hour + ":" + minute;
+		clockText.x = FlxG.width - 42;
+	}
+
 	function changeSelection(change:Int = 0)
 	{
-		if (change != 0)
-			FlxG.sound.play(Paths.sound('scrollMenu'), 1);
-
 		curSelected += change;
 
 		if (curSelected < 0)
 			curSelected = songs.length - 1;
 		if (curSelected >= songs.length)
 			curSelected = 0;
+
+		if ([0, 4, 16].contains(curSelected))
+		{
+			changeSelection(change == 0 ? 1 : change);
+			return;
+		}
+
+		if (change != 0)
+			FlxG.sound.play(Paths.sound('scrollMenu'), 1);
 
 		var newColor:Int = songs[curSelected].color;
 		if(newColor != intendedColor) {
@@ -465,7 +494,13 @@ class FreeplayState extends MusicBeatState
 			Application.current.window.resizable = true;
 			Application.current.window.borderless = false;
 		}
-		
+
+		FlxTween.cancelTweensOf(bliss);
+		if (songs[curSelected].songName == "title.wma")
+			FlxTween.tween(bliss, {alpha: 1}, 1.2);
+		else
+			FlxTween.tween(bliss, {alpha: 0}, 1.2);
+
 		if (songs[curSelected].songName == "nyan")
 		{
 			Application.current.window.title = "nyan";
@@ -473,7 +508,7 @@ class FreeplayState extends MusicBeatState
 		else 
 			Application.current.window.title = "Burrito Kitty PERFECTED CUT";
 
-		if (songs[curSelected].songName == "Insanity Infusion")
+		if (songs[curSelected].songName == "Insanity Infusion" || songs[curSelected].songName == "Sanity")
 			character = "BurritoFriend";
 
 		// selector.y = (70 * curSelected) + 30;
@@ -500,7 +535,7 @@ class FreeplayState extends MusicBeatState
 			item.alpha = 0.6;
 			// item.setGraphicSize(Std.int(item.width * 0.8));
 
-			if (item.targetY == 0)
+			if (item.targetY == 0 || [0, 4, 16].contains(grpSongs.members.indexOf(item)))
 			{
 				item.alpha = 1;
 				// item.setGraphicSize(Std.int(item.width));
@@ -513,7 +548,7 @@ class FreeplayState extends MusicBeatState
 	private function positionHighscore() {
 		scoreText.x = FlxG.width - scoreText.width - 6;
 
-		scoreBG.setGraphicSize(0, scoreText.height + diffText.height * 2 + 10 + (featureText.height * 2 + 20));
+		scoreBG.setGraphicSize(0, scoreText.height + diffText.height * 2 + 40);
 		scoreBG.scale.x = FlxG.width - scoreText.x + 6;
 		scoreBG.x = FlxG.width - (scoreBG.scale.x / 2);
 		diffText.x = Std.int(scoreBG.x + (scoreBG.width / 2));
