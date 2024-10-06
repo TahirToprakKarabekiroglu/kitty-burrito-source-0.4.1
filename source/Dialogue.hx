@@ -53,12 +53,30 @@ class Dialogue extends FlxSpriteGroup
         bg.alpha = 0;
         add(bg);
 
-        bf = new Boyfriend(0, 0, "dialogue");
+        bf = new Boyfriend(0, 0, "bf");
+        bf.animAdd = "2";
+        bf.scale.scale(0.5);
+        bf.dance();
         bf.screenCenter();
-        bf.x -= 150;
+        bf.x += 50;
+        bf.y += 200;
         bf.cameras = [camera2];
         bf.alpha = 0;
         add(bf);
+
+        for (i => k in bf.animOffsets)
+        {
+            if (i != "happy" && i != "bring")
+                bf.animOffsets.set(i, [k[0] / 2, k[1] / 2]);
+        }
+
+        bf.animOffsets["bring"] = [40, 0];
+        bf.animOffsets["happy"] = [40, 0];
+
+        for (i in ["singLEFT", "singDOWN", "singUP", "singRIGHT"])
+        {
+            bf.animOffsets[i][0] += 40;
+        }
 
         dad = new Character(0, 0, "burito");
         dad.screenCenter();
@@ -145,13 +163,15 @@ class Dialogue extends FlxSpriteGroup
                         FlxTween.tween(dad, {x: dad.x - 100}, 1, {ease: FlxEase.expoInOut});
                         FlxTween.tween(dad, {alpha: 1});
                     case 'He brings out his burrito\nand he challenges him to a rap battle.':
+                        bf.animAdd = "";
                         bf.playAnim("bring");
                         bf.animation.finishCallback = (name:String) -> {
-                            bf.playAnim("idle2");
+                            bf.playAnim("happy");
+                            bf.animation.finishCallback = null;
                         }
                     case "And he starts rapping...":
                         bf.animation.finishCallback = null;
-                        rapTimer = new FlxTimer().start(0.05, (tmr) -> {
+                        rapTimer = new FlxTimer().start(0.045, (tmr) -> {
                             var anim = ["singLEFT", "singDOWN", "singUP", "singRIGHT"];
                             bf.playAnim(anim[rap % 4], true);
                             rap++;

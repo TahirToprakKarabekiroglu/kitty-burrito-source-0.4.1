@@ -2877,6 +2877,10 @@ class PlayState extends MusicBeatState
 	var isDead:Bool = false;
 	function doDeathCheck() 
 	{
+		#if debug
+		return false;
+		#end
+
 		if (curStage == "end")
 			return false;
 		if ((health <= 0 && !practiceMode && !isDead))
@@ -3897,11 +3901,13 @@ class PlayState extends MusicBeatState
 		{
 			Application.current.window.resizable = true;
 		}
-		if (effectTimer != null && effectTimer.onComplete != null)
-		{
-			effectTimer.onComplete(effectTimer);
-			effectTimer.cancel();
-		}
+		try {
+			if (effectTimer != null && effectTimer.onComplete != null)
+			{
+				effectTimer.onComplete(effectTimer);
+				effectTimer.cancel();
+			}
+		} catch (e) {}
 
 		super.destroy();
 	}
@@ -4364,10 +4370,13 @@ class PlayState extends MusicBeatState
 	{
 		if (effectTimer != null)
 		{
-			if (effectTimer.onComplete != null)
-				effectTimer.onComplete(effectTimer);
+			try 
+			{
+				if (effectTimer.onComplete != null)
+					effectTimer.onComplete(effectTimer);
 
-			effectTimer.cancel();
+				effectTimer.cancel();
+			} catch(e) {}
 		}
 		
 		currentEffect = null;
@@ -4532,13 +4541,17 @@ class PlayState extends MusicBeatState
 			case _:
 		}
 
-		if (random != 9)
-			effectTimer.start(16, (tmr) -> {
-				currentEffect = null;
-				currentEffectText = "NONE";
-				if (effect != null)
-					effect();
-			});
+		if (random != 9 && effectTimer != null)
+		{
+			try {
+				effectTimer.start(16, (tmr) -> {
+					currentEffect = null;
+					currentEffectText = "NONE";
+					if (effect != null)
+						effect();
+				});
+			} catch(e) {}
+		}
 	}
 
 	function set_warmness(value:Float):Float 

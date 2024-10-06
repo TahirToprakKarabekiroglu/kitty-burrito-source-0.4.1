@@ -112,7 +112,8 @@ class FreeplayState extends MusicBeatState
 
 		songs.insert(0, new SongMetadata("STORY SONGS", 0, "", 0));
 		songs.insert(4, new SongMetadata("BONUS SONGS", 0, "", 0));
-		songs.insert(16, new SongMetadata("ORIGINAL SONGS", 0, "", 0));
+		if (FlxG.save.data.finishedFirstSong && FlxG.save.data.finishedSecondSong && FlxG.save.data.finishedThirdSong)
+			songs.insert(16, new SongMetadata("ORIGINAL SONGS", 0, "", 0));
 
 		for (i in 0...songs.length)
 		{
