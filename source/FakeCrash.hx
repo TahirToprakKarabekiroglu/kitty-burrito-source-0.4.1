@@ -1,5 +1,7 @@
 package;
 
+import lime.app.Application;
+#if windows
 @:cppFileCode('
 #include <stdlib.h>
 #include <stdio.h>
@@ -14,9 +16,13 @@ package;
 #pragma comment(lib, "Dwmapi")
 #pragma comment(lib, "Shell32.lib")
 ')
+#end
+
+import lime.app.Application;
 
 class FakeCrash
 {
+    #if windows
     @:functionCode('
         LPCSTR lwDesc = desc.c_str();
 
@@ -27,8 +33,16 @@ class FakeCrash
             MB_OK
         );
     ')
+    #end
     static public function crash(desc:String = "", res:Int = 0)
     {
+        #if !windows
+        for (i in Application.current.windows)
+            i.alert(desc, "Null Object Reference");
+
+        return 0;
+        #end
+
         return res;
     }
 }

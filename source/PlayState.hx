@@ -440,7 +440,7 @@ class PlayState extends MusicBeatState
 				bg.scrollFactor.set();
 				add(bg);
 
-				FakeCrash.crash('In the end, it\'s all fine.\nJust relax, there are no punishments for losing.\nPlay as you desire, or don\'t. See you, ${Sys.getEnv("USERNAME")}.');
+				FakeCrash.crash('In the end, it\'s all fine.\nJust relax, there are no punishments for losing.\nPlay as you desire, or don\'t. See you, ${Sys.getEnv(#if windows "USERNAME" #else "USER" #end)}.');
 			case 'earth':
 				earth = new FlxSprite(FlxG.width / 2, FlxG.height / 2).loadGraphic(Paths.image("earth"));
 				earth.screenCenter();
@@ -3146,9 +3146,15 @@ class PlayState extends MusicBeatState
 			};
 		if (Paths.formatToSongPath(SONG.song) == "in-the-end,-it's-all-fine" && FlxG.save.data.kitty == null)
 		{
-			FakeCrash.crash('In the end, it\'s all fine.\nCheck your desktop for a little surprise, ${Sys.getEnv("USERNAME")}.');
+			var userName:String = Sys.getEnv(#if windows "USERNAME" #else "USER" #end);
+			FakeCrash.crash('In the end, it\'s all fine.\nCheck your desktop for a little surprise, ${userName}.');
 
-			var path = Sys.getEnv("USERPROFILE") + "\\Desktop\\kitty.txt";
+			var path = userName + "\\Desktop\\kitty.txt";
+			#if mac
+			path = "/Users/" + userName + "/Desktop/kitty.txt";
+			#elseif linux
+			path = "/home/" + userName + "/Desktop.kitty.txt";
+			#end
 
 			sys.io.File.saveContent(path, Kitty.kitty + '\n\nkitty burrito');
 			FlxG.save.data.kitty = true;
