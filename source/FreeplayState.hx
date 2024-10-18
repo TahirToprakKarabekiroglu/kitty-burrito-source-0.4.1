@@ -507,7 +507,7 @@ class FreeplayState extends MusicBeatState
 			Application.current.window.title = "nyan";
 		}
 		else 
-			Application.current.window.title = "Burrito Kitty PERFECTED CUT";
+			Application.current.window.title = "Burrito Kitty";
 
 		if (songs[curSelected].songName == "Insanity Infusion" || songs[curSelected].songName == "Sanity")
 			character = "BurritoFriend";

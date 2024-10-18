@@ -107,7 +107,7 @@ class MainMenuState extends MusicBeatState
 
 		FlxG.camera.follow(camFollowPos, null, 1);
 
-		var versionShit:FlxText = new FlxText(12, FlxG.height - 64, 0, "Burrito Kitty PERFECTED CUT v618", 12);
+		var versionShit:FlxText = new FlxText(12, FlxG.height - 64, 0, "Burrito Kitty v618", 12);
 		versionShit.scrollFactor.set();
 		versionShit.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);

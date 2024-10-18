@@ -2,7 +2,7 @@
 <project>
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="Burrito Kitty PERFECTED CUT" file="BurritoKitty" packageName="com.tahirk786.burrito" package="com.tahirk786.burrito" main="Main" version="6.1.8" company="tahirk786" />
+	<app title="Burrito Kitty" file="Burrito Kitty" packageName="com.tahirk786.burrito" package="com.tahirk786.burrito" main="Main" version="6.1.8" company="tahirk786" />
 
 	<!--Switch Export with Unique ApplicationID and Icon-->
 	<set name="APP_ID" value="0x0100f6c013bbc000" />

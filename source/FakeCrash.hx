@@ -1,6 +1,7 @@
 package;
 
 import lime.app.Application;
+
 #if windows
 @:cppFileCode('
 #include <stdlib.h>
@@ -17,8 +18,6 @@ import lime.app.Application;
 #pragma comment(lib, "Shell32.lib")
 ')
 #end
-
-import lime.app.Application;
 
 class FakeCrash
 {

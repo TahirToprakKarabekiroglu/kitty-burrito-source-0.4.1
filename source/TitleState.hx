@@ -131,7 +131,7 @@ class TitleState extends MusicBeatState
 		Conductor.changeBPM(180);
 		persistentUpdate = true;
 
-		logoBl = new FlxSprite().loadGraphic(Paths.image("perfectcut"));
+		logoBl = new FlxSprite().loadGraphic(Paths.image("main"));
 		logoBl.screenCenter();
 		add(logoBl);
 

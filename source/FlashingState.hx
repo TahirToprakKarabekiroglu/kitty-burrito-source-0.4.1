@@ -24,7 +24,7 @@ class FlashingState extends MusicBeatState
 		"This mod contains remixes of my favourite songs.",
 		"Their original can be found at credits menu.",
 		"You can also access the originals at the box that appears at start.",
-		"Enjoy Burrito Kitty PERFECTED CUT. =)"]);
+		"Enjoy Burrito Kitty. =)"]);
 		dialogue.onClose = () -> {
 			leftState = true;
 			FlxG.save.data.sawCat = true;
