@@ -3153,7 +3153,7 @@ class PlayState extends MusicBeatState
 			#if mac
 			path = "/Users/" + userName + "/Desktop/kitty.txt";
 			#elseif linux
-			path = "/home/" + userName + "/Desktop.kitty.txt";
+			path = "/home/" + userName + "/Desktop/kitty.txt";
 			#end
 
 			sys.io.File.saveContent(path, Kitty.kitty + '\n\nkitty burrito');
